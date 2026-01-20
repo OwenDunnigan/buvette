@@ -1,0 +1,16 @@
+
+> app@0.0.1 dev
+> astro dev --port 4321
+
+22:19:50 [types] Generated 1ms
+22:19:50 [content] Syncing content
+22:19:50 [content] Synced content
+22:19:50 [vite] Re-optimizing dependencies because vite config has changed
+
+ astro  v5.16.11 ready in 631 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+
+22:19:50 watching for file changes...
+22:20:37 [200] / 1139ms
