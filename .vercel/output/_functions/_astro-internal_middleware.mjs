@@ -1,8 +1,7 @@
-import { d as defineMiddleware, s as sequence } from './chunks/index_D2mdH1GV.mjs';
+import { d as defineMiddleware, s as sequence } from './chunks/index_D3CHFv-1.mjs';
 import 'es-module-lexer';
-import './chunks/astro-designed-error-pages_DPmBH_v2.mjs';
-import 'piccolore';
-import './chunks/astro/server_BZHMmTXm.mjs';
+import './chunks/astro-designed-error-pages_BLDMQ-f4.mjs';
+import './chunks/astro/server_WahAFePi.mjs';
 import 'clsx';
 
 const THEMES = {
@@ -168,11 +167,7 @@ function isBlackoutDate(date) {
   const day = date.getDate();
   return month === 11 && day === 11 || month === 9 && day === 30;
 }
-async function getWinnipegContext() {
-  const now = Date.now();
-  if (cache && now - cache.timestamp < CACHE_DURATION) {
-    return cache.data;
-  }
+async function fetchWeather() {
   let temp = -5;
   let apparentTemp = -10;
   let windSpeed = 15;
@@ -202,8 +197,19 @@ async function getWinnipegContext() {
   } catch (e) {
     console.error("Error fetching weather:", e);
   }
+  return { temp, apparentTemp, windSpeed, wmoCode, cloudCover, isDay, deltaShock };
+}
+async function getWinnipegContext() {
+  const now = Date.now();
+  if (cache && now - cache.timestamp < CACHE_DURATION) {
+    return cache.data;
+  }
+  const [weather, jetsStatus] = await Promise.all([
+    fetchWeather(),
+    getJetsContext()
+  ]);
+  const { temp, apparentTemp, windSpeed, wmoCode, cloudCover, isDay, deltaShock } = weather;
   const { viscosity, windForce } = calculatePhysics(temp, windSpeed);
-  const jetsStatus = await getJetsContext();
   const date = /* @__PURE__ */ new Date();
   const month = date.getMonth();
   const seasonBias = month >= 2 && month <= 4 ? "optimistic" : "pessimistic";
