@@ -4,25 +4,32 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const { vibe } = Astro.locals;
+const { viscosity, windForce, temp } = vibe.weather;
+const theme = vibe.theme;
+
+// Calculate tempMood: 0 (Cold -30) to 1 (Hot +30)
+const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.palette.primary}; --contrast-level: ${theme.visuals.contrast}; --blur-amount: ${theme.visuals.blur};`}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette Restaurant" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+        <meta name="theme-color" content={theme.palette.primary} />
 		<title>{title} | Buvette</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&display=swap" rel="stylesheet">
 	</head>
-	<body class="font-sans text-stone-800 bg-stone-50 flex flex-col min-h-screen">
+	<body class={`font-mono text-stone-800 bg-stone-50 flex flex-col min-h-screen ${theme.mode}`}>
 		<header class="py-6 border-b border-stone-200">
             <div class="container mx-auto px-4 flex justify-between items-center">
-                <a href="/" class="text-3xl font-serif font-bold tracking-tight">Buvette</a>
+                <a href="/" class="text-3xl font-display font-bold tracking-tight">Buvette</a>
                 <nav>
                     <ul class="flex space-x-6 text-sm font-medium uppercase tracking-widest">
                         <li><a href="/" class="hover:text-stone-500 transition-colors">Home</a></li>
@@ -36,8 +43,8 @@ const { title } = Astro.props;
 		</main>
         <footer class="bg-stone-900 text-stone-100 py-12">
             <div class="container mx-auto px-4 text-center">
-                <p class="font-serif text-xl mb-4">Buvette</p>
-                <p class="text-stone-400 text-sm mb-2">42 Grove St, New York, NY 10014</p>
+                <p class="font-display text-xl mb-4">Buvette</p>
+                <p class="text-stone-400 text-sm mb-2">The Forks Market, Winnipeg, MB</p>
                 <p class="text-stone-400 text-sm">&copy; {new Date().getFullYear()} Buvette. All rights reserved.</p>
             </div>
         </footer>
@@ -46,13 +53,61 @@ const { title } = Astro.props;
 
 <style is:global>
     :root {
-        --font-serif: 'Lora', serif;
-        --font-sans: 'Montserrat', sans-serif;
+        --font-display: 'Recursive', sans-serif;
+        --font-mono: 'IBM Plex Mono', monospace;
+
+        /* Calculated Font Axes */
+        --font-slant: calc(var(--wind-force) * -12); /* Lean back 12deg max */
+        --font-casual: var(--temp-mood);             /* Stiff or Loose */
+        --font-weight-hero: calc(800 + (var(--wind-force) * 100)); /* Bulk up against wind */
     }
-    .font-serif {
-        font-family: var(--font-serif);
+
+    body {
+        transition: background-color calc(0.5s * var(--viscosity));
     }
-    .font-sans {
-        font-family: var(--font-sans);
+
+    .font-display {
+        font-family: var(--font-display);
+        font-variation-settings:
+            'MONO' 0,                   /* Proportional (Readable) */
+            'CASL' var(--font-casual),  /* Reacts to Temp */
+            'slnt' var(--font-slant),   /* Reacts to Wind */
+            'wght' var(--font-weight-hero);
+    }
+
+    .font-mono {
+        font-family: var(--font-mono);
+    }
+
+    /* 1. HEADLINES (The "Voice") */
+    h1, h2, .hero-text, .text-3xl {
+        font-family: var(--font-display);
+        font-variation-settings:
+            'MONO' 0,                   /* Proportional (Readable) */
+            'CASL' var(--font-casual),  /* Reacts to Temp */
+            'slnt' var(--font-slant),   /* Reacts to Wind */
+            'wght' var(--font-weight-hero);
+    }
+
+    /* 2. THE BIG DATA (The "gauge") */
+    .weather-display .temp-number {
+        font-family: 'Recursive', monospace; /* Switch to Mono for alignment */
+        font-variation-settings:
+            'MONO' 1,                   /* Force Monospace for numbers */
+            'CASL' 0,                   /* Keep numbers looking technical/stiff */
+            'slnt' var(--font-slant),   /* But let them LEAN in the wind */
+            'wght' 700;
+    }
+
+    /* 3. BODY COPY (The "Anchor") */
+    body, p, .menu-item {
+        font-family: 'IBM Plex Mono', monospace; /* Static, legible, industrial */
+        font-weight: 400;
+    }
+
+    /* The "Sun Lie" / Glare Logic */
+    .glare-overlay {
+        opacity: var(--contrast-level);
+        filter: blur(var(--blur-amount));
     }
 </style>
