@@ -3,12 +3,16 @@ import VibeInjector from '../components/VibeInjector.astro';
 
 interface Props {
 	title: string;
+    useDefaultContainer?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, useDefaultContainer = true } = Astro.props;
 const { vibe } = Astro.locals;
 const { viscosity, windForce, temp } = vibe.weather;
 const theme = vibe.theme;
+
+// Calculate windSpeed from windForce (0-1) -> (0-50) for the VibeInjector
+const windSpeed = windForce * 50;
 
 // Calculate tempMood: 0 (Cold -30) to 1 (Hot +30)
 const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
@@ -40,75 +44,65 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
                         <li><a href="/about" class="hover:bg-black hover:text-white px-1 transition-colors">About</a></li>
                     </ul>
                 </nav>
-            </header>
+            </div>
+		</header>
 
-            <main class="p-6 min-h-[400px]">
-                <slot />
-            </main>
+        <main class={`flex-grow ${useDefaultContainer ? 'container mx-auto px-4 py-8' : ''}`}>
+            <slot />
+        </main>
 
-            <footer class="p-6 border-t-2 border-dashed border-stone-900 relative">
-                <!-- Location & Hours Section (Moved from Home) -->
-                <div class="grid grid-cols-2 gap-4 mb-8 text-[10px] uppercase">
-                    <div>
-                        <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Location</h3>
-                        <p>42 Grove St</p>
-                        <p>New York, NY 10014</p>
-                        <p class="mt-2 text-[10px] underline cursor-pointer">Get Directions</p>
-                    </div>
-                    <div>
-                        <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Hours</h3>
-                        <div class="flex justify-between">
-                            <span>M-F</span>
-                            <span>08:00-00:00</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>S-S</span>
-                            <span>09:00-00:00</span>
-                        </div>
-                    </div>
+        <footer class="p-6 border-t-2 border-dashed border-stone-900 relative">
+            <!-- Location & Hours Section -->
+            <div class="grid grid-cols-2 gap-4 mb-8 text-[10px] uppercase">
+                <div>
+                    <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Location</h3>
+                    <p>42 Grove St</p>
+                    <p>New York, NY 10014</p>
+                    <p class="mt-2 text-[10px] underline cursor-pointer">Get Directions</p>
                 </div>
-
-                <div class="text-center">
-                    <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
-                    <p class="text-xs uppercase mb-2">Please Come Again</p>
-                    <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
-                </div>
-
-                <div class="mt-6 flex justify-center overflow-hidden">
-                    <!-- Barcode simulation -->
-                    <div class="h-12 flex items-end gap-[2px]">
-                         {Array.from({ length: 50 }).map(() => (
-                            <div
-                                class="bg-black"
-                                style={{
-                                    width: Math.random() > 0.5 ? '2px' : '4px',
-                                    height: `${Math.floor(Math.random() * 60) + 40}%`
-                                }}
-                            ></div>
-                         ))}
+                <div>
+                    <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Hours</h3>
+                    <div class="flex justify-between">
+                        <span>M-F</span>
+                        <span>08:00-00:00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>S-S</span>
+                        <span>09:00-00:00</span>
                     </div>
                 </div>
-            </footer>
+            </div>
+
+            <div class="text-center">
+                <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
+                <p class="text-xs uppercase mb-2">Please Come Again</p>
+                <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
+            </div>
+
+            <div class="mt-6 flex justify-center overflow-hidden">
+                <!-- Barcode simulation -->
+                <div class="h-12 flex items-end gap-[2px]">
+                        {Array.from({ length: 50 }).map(() => (
+                        <div
+                            class="bg-black"
+                            style={{
+                                width: Math.random() > 0.5 ? '2px' : '4px',
+                                height: `${Math.floor(Math.random() * 60) + 40}%`
+                            }}
+                        ></div>
+                        ))}
+                </div>
+            </div>
 
             <!-- Jagged bottom edge using CSS gradient -->
             <div class="absolute left-0 right-0 h-4"
-                 style={{
+                    style={{
                     bottom: '-16px',
                     background: 'linear-gradient(45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%)',
                     backgroundSize: '20px 40px',
                     backgroundPosition: '0 -20px'
-                 }}
+                    }}
             >
-            </div>
-		</header>
-		<main class="flex-grow container mx-auto px-4 py-8">
-			<slot />
-		</main>
-        <footer class="bg-stone-900 text-stone-100 py-12">
-            <div class="container mx-auto px-4 text-center">
-                <p class="font-display text-xl mb-4">Buvette</p>
-                <p class="text-stone-400 text-sm mb-2">The Forks Market, Winnipeg, MB</p>
-                <p class="text-stone-400 text-sm">&copy; {new Date().getFullYear()} Buvette. All rights reserved.</p>
             </div>
         </footer>
 	</body>

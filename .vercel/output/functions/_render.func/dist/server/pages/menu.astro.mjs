@@ -1,7 +1,7 @@
 /* empty css                                 */
-import { e as createComponent, f as createAstro, m as maybeRenderHead, r as renderTemplate, k as renderComponent } from '../chunks/astro/server_gaODcwwG.mjs';
+import { e as createComponent, f as createAstro, m as maybeRenderHead, r as renderTemplate, k as renderComponent } from '../chunks/astro/server_CH2CU_Hd.mjs';
 import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_BPF4au8r.mjs';
+import { $ as $$Layout } from '../chunks/Layout_D-A06w7E.mjs';
 import 'clsx';
 import Papa from 'papaparse';
 import fs from 'node:fs';
@@ -13,7 +13,7 @@ const $$MenuItem = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$1, $$props, $$slots);
   Astro2.self = $$MenuItem;
   const { name, description, price } = Astro2.props;
-  return renderTemplate`${maybeRenderHead()}<div class="mb-6 break-inside-avoid"> <div class="flex justify-between items-baseline mb-1 border-b border-stone-200 pb-1 border-dotted"> <h3 class="text-lg font-display font-semibold text-stone-900">${name}</h3> <span class="text-base font-medium ml-4 text-stone-700">${price}</span> </div> <p class="text-stone-600 text-sm italic">${description}</p> </div>`;
+  return renderTemplate`${maybeRenderHead()}<div class="mb-6 break-inside-avoid"> <div class="flex justify-between items-baseline mb-1 border-b border-stone-200 pb-1 border-dotted"> <h3 class="text-lg font-display font-semibold text-stone-900">${name}</h3> <span class="text-base font-medium ml-4 text-stone-700">${price}</span> </div> ${description && renderTemplate`<p class="text-[10px] text-stone-500 mt-1 uppercase leading-tight max-w-[90%]">${description}</p>`} </div>`;
 }, "/app/src/components/MenuItem.astro", void 0);
 
 const $$Astro = createAstro();
@@ -21,7 +21,7 @@ const $$MenuSection = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$MenuSection;
   const { title, items } = Astro2.props;
-  return renderTemplate`${maybeRenderHead()}<section class="mb-12"> <div class="text-center mb-8"> <h2 class="text-2xl font-display font-bold uppercase tracking-widest inline-block border-b-2 border-stone-300 pb-2">${title}</h2> </div> <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4"> ${items.map((item) => renderTemplate`${renderComponent($$result, "MenuItem", $$MenuItem, { "name": item.Name, "description": item.Description, "price": item.Price })}`)} </div> </section>`;
+  return renderTemplate`${maybeRenderHead()}<section class="mb-12"> <div class="text-center mb-8"> <h2 class="text-2xl font-display font-bold uppercase tracking-widest inline-block border-b-2 border-stone-300 pb-2">${title}</h2> </div> <div class="flex flex-col"> ${items.map((item) => renderTemplate`${renderComponent($$result, "MenuItem", $$MenuItem, { "name": item.Name, "description": item.Description, "price": item.Price })}`)} </div> </section>`;
 }, "/app/src/components/MenuSection.astro", void 0);
 
 async function getMenuData() {
@@ -59,7 +59,7 @@ async function getMenuData() {
 const $$Menu = createComponent(async ($$result, $$props, $$slots) => {
   const menuData = await getMenuData();
   const categories = Object.keys(menuData);
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Menu" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="text-center mb-12"> <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Menu</h1> <p class="text-stone-500 italic">Seasonal & Fresh</p> </div> ${categories.length > 0 ? categories.map((category) => renderTemplate`${renderComponent($$result2, "MenuSection", $$MenuSection, { "title": category, "items": menuData[category] })}`) : renderTemplate`<div class="text-center py-12"> <p class="text-xl text-stone-500">No menu items found.</p> </div>`}` })}`;
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Menu" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="text-center mb-12"> <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">Menu</h1> <p class="text-stone-500 italic">Seasonal & Fresh</p> </div> ${categories.length > 0 ? categories.map((category) => renderTemplate`${renderComponent($$result2, "MenuSection", $$MenuSection, { "title": category, "items": menuData[category] })}`) : renderTemplate`<div class="text-center py-12"> <p class="text-sm uppercase border-2 border-black inline-block px-4 py-2">No menu items found</p> </div>`}<div class="mt-12 pt-4 border-t-4 border-double border-black flex justify-between items-end uppercase font-bold"> <div class="text-left"> <p class="text-[10px] font-normal">Service Charge</p> <p class="text-[10px] font-normal">Tax</p> <p class="text-lg mt-1">Total</p> </div> <div class="text-right"> <p class="text-[10px] font-normal">Included</p> <p class="text-[10px] font-normal">Included</p> <p class="text-lg mt-1">$ Priceless</p> </div> </div> ` })}`;
 }, "/app/src/pages/menu.astro", void 0);
 
 const $$file = "/app/src/pages/menu.astro";

@@ -1,0 +1,33 @@
+/* empty css                                 */
+import { e as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_CH2CU_Hd.mjs';
+import 'piccolore';
+import { $ as $$Layout } from '../chunks/Layout_D-A06w7E.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$About = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "About" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="max-w-2xl mx-auto"> <div class="text-center mb-12 pb-4 border-b-2 border-stone-900 border-dashed"> <h1 class="text-4xl font-display font-bold uppercase tracking-[0.2em]">About Us</h1> <p class="text-xs font-mono uppercase mt-2">Est. 2024 &mdash; Winnipeg, MB</p> </div> <div class="font-mono text-sm space-y-12 text-justify uppercase leading-relaxed"> <!-- Section 1 --> <div class="space-y-6"> <p>
+Buvette is a celebration of the European tradition of "eating and drinking."
+            We are dedicated to the joy of gathering, serving fresh, seasonal ingredients
+            prepared with simplicity and heart.
+</p> <div class="aspect-video w-full overflow-hidden bg-stone-200 border border-stone-900"> <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Restaurant Interior" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"> <p class="text-[10px] mt-1 text-center normal-case text-stone-500">The main dining room during golden hour.</p> </div> </div> <!-- Quote --> <div class="py-4"> <div class="border-l-4 border-stone-900 pl-6 italic normal-case text-lg md:text-xl font-display text-stone-800">
+"It's not just about the food, it's about the moment."
+</div> </div> <!-- Section 2 --> <div class="space-y-6"> <p>
+Our menu changes daily, reflecting the best of what the market has to offer.
+            From our morning espressos to our late-night cocktails, everything is crafted
+            with care.
+</p> <div class="grid grid-cols-2 gap-4"> <div class="aspect-square overflow-hidden bg-stone-200 border border-stone-900"> <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Plating detail" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"> </div> <div class="aspect-square overflow-hidden bg-stone-200 border border-stone-900"> <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=80" alt="Chef in kitchen" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"> </div> </div> <p class="text-[10px] text-center normal-case text-stone-500">Seasonal plating & Kitchen preparation.</p> </div> </div> <div class="mt-16 text-center"> <div class="inline-block border-2 border-stone-900 p-4 rotate-2 hover:rotate-0 transition-transform bg-white shadow-lg"> <p class="text-sm font-bold font-display">Chef's Table</p> <p class="text-[10px] font-mono">Available by request</p> <div class="mt-2 w-full h-px bg-stone-900"></div> <p class="text-[10px] mt-1">Ask your server</p> </div> </div> </div> ` })}`;
+}, "/app/src/pages/about.astro", void 0);
+
+const $$file = "/app/src/pages/about.astro";
+const $$url = "/about";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$About,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
