@@ -28,6 +28,7 @@ const { title } = Astro.props;
                     <ul class="flex justify-center space-x-6 text-sm font-bold uppercase">
                         <li><a href="/" class="hover:bg-black hover:text-white px-1 transition-colors">Home</a></li>
                         <li><a href="/menu" class="hover:bg-black hover:text-white px-1 transition-colors">Menu</a></li>
+                        <li><a href="/about" class="hover:bg-black hover:text-white px-1 transition-colors">About</a></li>
                     </ul>
                 </nav>
             </header>
@@ -36,10 +37,33 @@ const { title } = Astro.props;
                 <slot />
             </main>
 
-            <footer class="p-6 text-center border-t-2 border-dashed border-stone-900 relative">
-                <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
-                <p class="text-xs uppercase mb-2">Please Come Again</p>
-                <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
+            <footer class="p-6 border-t-2 border-dashed border-stone-900 relative">
+                <!-- Location & Hours Section (Moved from Home) -->
+                <div class="grid grid-cols-2 gap-4 mb-8 text-[10px] uppercase">
+                    <div>
+                        <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Location</h3>
+                        <p>42 Grove St</p>
+                        <p>New York, NY 10014</p>
+                        <p class="mt-2 text-[10px] underline cursor-pointer">Get Directions</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Hours</h3>
+                        <div class="flex justify-between">
+                            <span>M-F</span>
+                            <span>08:00-00:00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>S-S</span>
+                            <span>09:00-00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
+                    <p class="text-xs uppercase mb-2">Please Come Again</p>
+                    <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
+                </div>
 
                 <div class="mt-6 flex justify-center overflow-hidden">
                     <!-- Barcode simulation -->

@@ -3,14 +3,22 @@ import Layout from '../layouts/Layout.astro';
 
 const today = new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
 const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+const dayOfWeek = new Date().getDay();
+const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 is Sunday, 6 is Saturday
+const openHours = isWeekend ? "09:00 - 00:00" : "08:00 - 00:00";
 ---
 
 <Layout title="Home">
   <div class="flex flex-col items-center text-center space-y-4 font-mono text-sm">
 
-    <div class="w-full flex justify-between uppercase text-xs border-b border-dashed border-stone-400 pb-4 mb-2">
-        <span>Date: {today}</span>
-        <span>Time: {time}</span>
+    <div class="w-full flex flex-col justify-center uppercase text-xs border-b border-dashed border-stone-400 pb-4 mb-2">
+        <div class="flex justify-between w-full mb-1">
+            <span>Date: {today}</span>
+            <span>Time: {time}</span>
+        </div>
+        <div class="text-center font-bold">
+            Open Today: {openHours}
+        </div>
     </div>
 
     <div class="py-4">
@@ -21,31 +29,17 @@ const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '
         </p>
     </div>
 
-    <div class="w-full border-2 border-black p-4 mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white transform rotate-1 hover:rotate-0 transition-transform duration-300">
-        <a href="/menu" class="block w-full h-full uppercase font-bold text-lg tracking-widest hover:underline decoration-wavy">
-            &gt;&gt;&gt; View Menu &lt;&lt;&lt;
-        </a>
-    </div>
-
-    <div class="w-full space-y-4 mt-8">
-        <div class="text-left border-l-2 border-black pl-4">
-            <h2 class="font-bold uppercase mb-1">Hours</h2>
-            <div class="flex justify-between text-xs">
-                <span>Mon - Fri</span>
-                <span>08:00 - 00:00</span>
-            </div>
-            <div class="flex justify-between text-xs">
-                <span>Sat - Sun</span>
-                <span>09:00 - 00:00</span>
-            </div>
-            <p class="mt-2 text-[10px] uppercase">* Walk-ins welcome</p>
+    <div class="w-full space-y-4 mb-6">
+        <div class="w-full border-2 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-stone-200 hover:bg-stone-300 transition-colors cursor-pointer">
+            <a href="#" class="block w-full h-full uppercase font-bold text-sm tracking-widest">
+                [ Get Directions ]
+            </a>
         </div>
 
-        <div class="text-left border-l-2 border-black pl-4">
-            <h2 class="font-bold uppercase mb-1">Location</h2>
-            <p class="text-xs uppercase">42 Grove St</p>
-            <p class="text-xs uppercase">New York, NY 10014</p>
-            <p class="mt-2 text-[10px] underline cursor-pointer">Get Directions</p>
+        <div class="w-full border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white transform rotate-1 hover:rotate-0 transition-transform duration-300">
+            <a href="/menu" class="block w-full h-full uppercase font-bold text-lg tracking-widest hover:underline decoration-wavy">
+                &gt;&gt;&gt; View Menu &lt;&lt;&lt;
+            </a>
         </div>
     </div>
 
