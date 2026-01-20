@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Home">
+  <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
+    <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-stone-900">Buvette</h1>
+    <p class="text-xl md:text-2xl font-light mb-8 max-w-2xl text-stone-600">
+      Inspired by European traditions. Dedicated to the joy of eating and drinking.
+    </p>
+    <a href="/menu" class="bg-stone-900 text-stone-50 px-8 py-3 text-sm uppercase tracking-widest hover:bg-stone-700 transition-colors">
+      View Menu
+    </a>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+      <div class="bg-white p-8 shadow-sm border border-stone-100">
+          <h2 class="font-serif text-2xl mb-4">Hours</h2>
+          <p class="mb-1"><strong>Monday - Friday:</strong> 8am - 12am</p>
+          <p class="mb-1"><strong>Saturday - Sunday:</strong> 9am - 12am</p>
+          <p class="mt-4 italic text-sm text-stone-500">Walk-ins welcome.</p>
+      </div>
+      <div class="bg-white p-8 shadow-sm border border-stone-100">
+          <h2 class="font-serif text-2xl mb-4">Location</h2>
+          <p class="mb-1">42 Grove St</p>
+          <p class="mb-1">New York, NY 10014</p>
+          <p class="mt-4"><a href="#" class="underline text-stone-600">Get Directions</a></p>
+      </div>
+  </div>
+</Layout>

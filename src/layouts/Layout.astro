@@ -1,0 +1,58 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Buvette Restaurant" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | Buvette</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+	</head>
+	<body class="font-sans text-stone-800 bg-stone-50 flex flex-col min-h-screen">
+		<header class="py-6 border-b border-stone-200">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <a href="/" class="text-3xl font-serif font-bold tracking-tight">Buvette</a>
+                <nav>
+                    <ul class="flex space-x-6 text-sm font-medium uppercase tracking-widest">
+                        <li><a href="/" class="hover:text-stone-500 transition-colors">Home</a></li>
+                        <li><a href="/menu" class="hover:text-stone-500 transition-colors">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+		</header>
+		<main class="flex-grow container mx-auto px-4 py-8">
+			<slot />
+		</main>
+        <footer class="bg-stone-900 text-stone-100 py-12">
+            <div class="container mx-auto px-4 text-center">
+                <p class="font-serif text-xl mb-4">Buvette</p>
+                <p class="text-stone-400 text-sm mb-2">42 Grove St, New York, NY 10014</p>
+                <p class="text-stone-400 text-sm">&copy; {new Date().getFullYear()} Buvette. All rights reserved.</p>
+            </div>
+        </footer>
+	</body>
+</html>
+
+<style is:global>
+    :root {
+        --font-serif: 'Lora', serif;
+        --font-sans: 'Montserrat', sans-serif;
+    }
+    .font-serif {
+        font-family: var(--font-serif);
+    }
+    .font-sans {
+        font-family: var(--font-sans);
+    }
+</style>

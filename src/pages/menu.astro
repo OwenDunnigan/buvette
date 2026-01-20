@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MenuSection from '../components/MenuSection.astro';
+import { getMenuData } from '../utils/sheets';
+
+const menuData = await getMenuData();
+// Define a preferred order if possible, otherwise just use object keys order (which is insertion order mostly)
+// Or let the CSV order dictate it if I parsed it that way. 
+// Papa parse returns an array, but I reduced it to an object.
+// To preserve order, I should probably return an array of sections from getMenuData or just rely on Object.keys for now if the reduce kept order (it usually does for string keys in JS, but better to be explicit).
+
+// Let's rely on the CSV order.
+// In getMenuData I used reduce on the array.
+// To ensure order, I should have maybe returned an array of { category: string, items: MenuItem[] }.
+// But Object.keys() on an object created by adding keys in order usually preserves order in modern JS engines.
+
+const categories = Object.keys(menuData);
+---
+
+<Layout title="Menu">
+  <div class="text-center mb-12">
+    <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">Menu</h1>
+    <p class="text-stone-500 italic">Seasonal & Fresh</p>
+  </div>
+
+  {categories.length > 0 ? (
+    categories.map(category => (
+      <MenuSection title={category} items={menuData[category]} />
+    ))
+  ) : (
+    <div class="text-center py-12">
+      <p class="text-xl text-stone-500">No menu items found.</p>
+    </div>
+  )}
+</Layout>
