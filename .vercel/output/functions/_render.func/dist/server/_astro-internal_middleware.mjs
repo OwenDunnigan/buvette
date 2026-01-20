@@ -220,6 +220,7 @@ async function getWinnipegContext() {
       apparentTemp,
       viscosity,
       windForce,
+      windSpeed,
       isSunLie: temp < -20 && cloudCover < 20 && isDay === 1,
       isSmoke: false,
       // Need AQI API, defaulting to false for now
