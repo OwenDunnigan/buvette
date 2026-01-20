@@ -1,14 +1,18 @@
 ---
+import VibeInjector from '../components/VibeInjector.astro';
+
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+const { theme = 'NORMAL', windSpeed = 10 } = Astro.locals;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
+		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette Restaurant" />
 		<meta name="viewport" content="width=device-width" />
@@ -19,7 +23,7 @@ const { title } = Astro.props;
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 	</head>
-	<body class="font-mono bg-stone-300 min-h-screen py-8 md:py-12 px-4 flex justify-center items-start selection:bg-black selection:text-white">
+	<body class="font-mono min-h-screen py-8 md:py-12 px-4 flex justify-center items-start selection:bg-black selection:text-white">
         <div class="receipt-container bg-stone-100 text-stone-900 w-full max-w-md mx-auto shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-stone-900 relative">
             <header class="p-6 text-center border-b-2 border-dashed border-stone-900">
                 <a href="/" class="text-3xl font-bold uppercase tracking-wider block mb-2 hover:line-through decoration-2">Buvette</a>
@@ -82,7 +86,7 @@ const { title } = Astro.props;
             </footer>
 
             <!-- Jagged bottom edge using CSS gradient -->
-            <div class="absolute left-0 right-0 h-4 bg-stone-300"
+            <div class="absolute left-0 right-0 h-4"
                  style={{
                     bottom: '-16px',
                     background: 'linear-gradient(45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%)',

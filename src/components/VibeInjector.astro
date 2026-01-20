@@ -1,0 +1,142 @@
+---
+import { THEMES, type ThemeKey } from '../themes';
+
+interface Props {
+  currentTheme: ThemeKey;
+  windSpeed: number; // 0 to 50 km/h
+}
+
+const { currentTheme, windSpeed } = Astro.props;
+const config = THEMES[currentTheme] || THEMES['NORMAL'];
+
+// Calculate dynamic font adjustments based on Real-Time Wind
+// (The theme sets the BASE, the wind adds the DELTA)
+const windForce = Math.min(windSpeed / 50, 1);
+const finalSlant = config.typography.slant - (windForce * 10); // Theme slant + Wind slant
+const finalWeight = config.typography.weight + (windForce * 100); // Bulwark against wind
+
+// Inline SVG for noise (data URI)
+const noiseSvg = `data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E`;
+
+---
+
+<!-- Import Recursive Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&display=swap" rel="stylesheet">
+
+<style define:vars={{
+  'theme-bg': config.colors.bg,
+  'theme-text': config.colors.text,
+  'theme-accent': config.colors.accent,
+  'theme-surface': config.colors.surface,
+
+  'phys-viscosity': `${config.physics.viscosity}s`,
+  'phys-cursor': config.physics.cursor,
+
+  'type-casual': config.typography.casual,
+  'type-slant': finalSlant,
+  'type-weight': finalWeight,
+
+  'fx-contrast': `${config.effects.contrast}%`,
+  'fx-blur': config.effects.blur,
+  'fx-noise': config.effects.noise,
+  'fx-saturate': `${config.effects.saturate}%`,
+
+  'noise-url': `url("${noiseSvg}")`
+}}>
+  /* 1. Global Color Transition */
+  :root {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    transition: background-color 0.8s ease, color 0.5s ease;
+  }
+
+  /* 2. The "Viscosity" Scrolling Feel */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Applying viscosity to hover states makes them feel "thick" */
+  button, a {
+    transition-duration: var(--phys-viscosity) !important;
+    cursor: var(--phys-cursor);
+  }
+
+  /* 3. The "Wind & Mood" Typography */
+  /* We apply this to headings, but also allow a class to force it */
+  :global(h1), :global(h2), :global(h3), :global(.vibe-font) {
+    font-family: 'Recursive', sans-serif;
+    font-variation-settings:
+      'CASL' var(--type-casual),
+      'slnt' var(--type-slant),
+      'wght' var(--type-weight),
+      'MONO' 0;
+    transition: font-variation-settings 1s ease;
+  }
+
+  /* 4. The "Atmosphere" Filters (Blur, Haze, Glare) */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+
+    /* The Grain Overlay */
+    background-image: var(--noise-url);
+    opacity: var(--fx-noise);
+    mix-blend-mode: overlay;
+  }
+
+  /* The Main Content Filter Wrapper */
+  /* We target the receipt container so the whole "paper" feels the atmosphere */
+  :global(.receipt-container) {
+    filter:
+      contrast(var(--fx-contrast))
+      blur(var(--fx-blur))
+      saturate(var(--fx-saturate));
+    transition: filter 1s ease;
+  }
+
+  /* --- UNIQUE QUIRKS --- */
+
+  /* Effect 1: The "Shiver" (Deep Cold) */
+  @keyframes shiver {
+    0% { transform: translate(0, 0); }
+    2% { transform: translate(-1px, 0); }
+    4% { transform: translate(1px, 0); }
+    6% { transform: translate(0, 0); }
+    100% { transform: translate(0, 0); }
+  }
+  :global(.theme-DEEP_FREEZE) button,
+  :global(.theme-BUNKER) button,
+  :global(.theme-NORTH_WIND) button {
+    animation: shiver 3s infinite linear;
+  }
+
+  /* Effect 2: The "Glare" (Sun Dog / Sun Lie) */
+  :global(.theme-SUN_DOG) .card,
+  :global(.theme-SUN_DOG) .receipt-container {
+    box-shadow: 0 0 20px 5px rgba(200, 240, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+  }
+
+  /* Effect 3: The "Mosquito" (Hover State) */
+  :global(.theme-MOSQUITO_SWARM) a:hover {
+    animation: buzz 0.2s infinite;
+  }
+  @keyframes buzz {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(1deg); }
+    75% { transform: rotate(-1deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  /* Effect 4: The "Mud" (Slush/Flood Mode) */
+  :global(.theme-SLUSH) body,
+  :global(.theme-FLOOD) body {
+    background-image: linear-gradient(to top, #5D4037 0%, transparent 20%);
+    background-attachment: fixed;
+  }
+</style>
