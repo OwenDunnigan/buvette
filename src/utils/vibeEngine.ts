@@ -151,12 +151,17 @@ function isBlackoutDate(date: Date): boolean {
 
 // --- Main Engine ---
 
-export async function getWinnipegContext(): Promise<WinnipegContext> {
-    const now = Date.now();
-    if (cache && (now - cache.timestamp < CACHE_DURATION)) {
-        return cache.data;
-    }
+interface WeatherData {
+    temp: number;
+    apparentTemp: number;
+    windSpeed: number;
+    wmoCode: number;
+    cloudCover: number;
+    isDay: number;
+    deltaShock: number;
+}
 
+async function fetchWeather(): Promise<WeatherData> {
     // Default Values
     let temp = -5;
     let apparentTemp = -10;
@@ -205,8 +210,23 @@ export async function getWinnipegContext(): Promise<WinnipegContext> {
         console.error('Error fetching weather:', e);
     }
 
+    return { temp, apparentTemp, windSpeed, wmoCode, cloudCover, isDay, deltaShock };
+}
+
+
+export async function getWinnipegContext(): Promise<WinnipegContext> {
+    const now = Date.now();
+    if (cache && (now - cache.timestamp < CACHE_DURATION)) {
+        return cache.data;
+    }
+
+    const [weather, jetsStatus] = await Promise.all([
+        fetchWeather(),
+        getJetsContext()
+    ]);
+
+    const { temp, apparentTemp, windSpeed, wmoCode, cloudCover, isDay, deltaShock } = weather;
     const { viscosity, windForce } = calculatePhysics(temp, windSpeed);
-    const jetsStatus = await getJetsContext();
 
     // Determine Season Bias
     const date = new Date();
