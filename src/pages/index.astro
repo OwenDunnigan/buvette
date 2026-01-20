@@ -1,30 +1,53 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const today = new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+const dayOfWeek = new Date().getDay();
+const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // 0 is Sunday, 6 is Saturday
+const openHours = isWeekend ? "09:00 - 00:00" : "08:00 - 00:00";
 ---
 
 <Layout title="Home">
-  <div class="flex flex-col items-center justify-center min-h-[60vh] text-center">
-    <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-stone-900">Buvette</h1>
-    <p class="text-xl md:text-2xl font-light mb-8 max-w-2xl text-stone-600">
-      Inspired by European traditions. Dedicated to the joy of eating and drinking.
-    </p>
-    <a href="/menu" class="bg-stone-900 text-stone-50 px-8 py-3 text-sm uppercase tracking-widest hover:bg-stone-700 transition-colors">
-      View Menu
-    </a>
-  </div>
-  
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
-      <div class="bg-white p-8 shadow-sm border border-stone-100">
-          <h2 class="font-serif text-2xl mb-4">Hours</h2>
-          <p class="mb-1"><strong>Monday - Friday:</strong> 8am - 12am</p>
-          <p class="mb-1"><strong>Saturday - Sunday:</strong> 9am - 12am</p>
-          <p class="mt-4 italic text-sm text-stone-500">Walk-ins welcome.</p>
-      </div>
-      <div class="bg-white p-8 shadow-sm border border-stone-100">
-          <h2 class="font-serif text-2xl mb-4">Location</h2>
-          <p class="mb-1">42 Grove St</p>
-          <p class="mb-1">New York, NY 10014</p>
-          <p class="mt-4"><a href="#" class="underline text-stone-600">Get Directions</a></p>
-      </div>
+  <div class="flex flex-col items-center text-center space-y-4 font-mono text-sm">
+
+    <div class="w-full flex flex-col justify-center uppercase text-xs border-b border-dashed border-stone-400 pb-4 mb-2">
+        <div class="flex justify-between w-full mb-1">
+            <span>Date: {today}</span>
+            <span>Time: {time}</span>
+        </div>
+        <div class="text-center font-bold">
+            Open Today: {openHours}
+        </div>
+    </div>
+
+    <div class="py-4">
+        <h1 class="text-2xl font-bold uppercase mb-2">Welcome</h1>
+        <p class="uppercase text-xs max-w-[200px] mx-auto leading-relaxed">
+            Inspired by European traditions.<br/>
+            Dedicated to the joy of eating and drinking.
+        </p>
+    </div>
+
+    <div class="w-full space-y-4 mb-6">
+        <div class="w-full border-2 border-black p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-stone-200 hover:bg-stone-300 transition-colors cursor-pointer">
+            <a href="#" class="block w-full h-full uppercase font-bold text-sm tracking-widest">
+                [ Get Directions ]
+            </a>
+        </div>
+
+        <div class="w-full border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white transform rotate-1 hover:rotate-0 transition-transform duration-300">
+            <a href="/menu" class="block w-full h-full uppercase font-bold text-lg tracking-widest hover:underline decoration-wavy">
+                &gt;&gt;&gt; View Menu &lt;&lt;&lt;
+            </a>
+        </div>
+    </div>
+
+    <div class="pt-8 pb-4 text-center">
+        <p class="uppercase text-xs font-bold border-2 border-black inline-block px-2 py-1 rotate-[-2deg]">
+            Order #{(Math.random() * 1000).toFixed(0).padStart(4, '0')}
+        </p>
+    </div>
+
   </div>
 </Layout>
