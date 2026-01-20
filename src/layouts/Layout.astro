@@ -1,4 +1,6 @@
 ---
+import VibeInjector from '../components/VibeInjector.astro';
+
 interface Props {
 	title: string;
 }
@@ -15,6 +17,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 <!doctype html>
 <html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.palette.primary}; --contrast-level: ${theme.visuals.contrast}; --blur-amount: ${theme.visuals.blur};`}>
 	<head>
+		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette Restaurant" />
 		<meta name="viewport" content="width=device-width" />
@@ -88,7 +91,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
             </footer>
 
             <!-- Jagged bottom edge using CSS gradient -->
-            <div class="absolute left-0 right-0 h-4 bg-stone-300"
+            <div class="absolute left-0 right-0 h-4"
                  style={{
                     bottom: '-16px',
                     background: 'linear-gradient(45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%)',
