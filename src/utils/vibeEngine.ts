@@ -8,6 +8,7 @@ export interface WinnipegContext {
         apparentTemp: number;
         viscosity: number;
         windForce: number;
+        windSpeed: number;
         isSunLie: boolean;
         isSmoke: boolean;
         precipType: 'none' | 'snow' | 'rain' | 'ice';
@@ -242,6 +243,7 @@ export async function getWinnipegContext(): Promise<WinnipegContext> {
             apparentTemp,
             viscosity,
             windForce,
+            windSpeed,
             isSunLie: temp < -20 && cloudCover < 20 && isDay === 1,
             isSmoke: false, // Need AQI API, defaulting to false for now
             precipType: getPrecipType(wmoCode, temp),

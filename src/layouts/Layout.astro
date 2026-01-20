@@ -7,7 +7,7 @@ interface Props {
 
 const { title } = Astro.props;
 const { vibe } = Astro.locals;
-const { viscosity, windForce, temp } = vibe.weather;
+const { viscosity, windForce, temp, windSpeed } = vibe.weather;
 const theme = vibe.theme;
 
 // Calculate tempMood: 0 (Cold -30) to 1 (Hot +30)
