@@ -1,8 +1,7 @@
-import { G as decryptString, H as createSlotValueFromString, J as isAstroComponentFactory, k as renderComponent, r as renderTemplate, q as REROUTE_DIRECTIVE_HEADER, A as AstroError, K as i18nNoLocaleFoundInPath, O as ResponseSentError, P as originPathnameSymbol, Q as RewriteWithBodyUsed, S as GetStaticPathsRequired, T as InvalidGetStaticPathsReturn, V as InvalidGetStaticPathsEntry, W as GetStaticPathsExpectedParams, X as GetStaticPathsInvalidRouteParam, Y as PageNumberParamNotFound, D as DEFAULT_404_COMPONENT, Z as NoMatchingStaticPathFound, _ as PrerenderDynamicEndpointPathCollide, $ as ReservedSlotName, a0 as renderSlotToString, a1 as renderJSX, a2 as chunkToString, a3 as isRenderInstruction, v as ActionNotFoundError, a4 as MiddlewareNoDataOrNextCalled, a5 as MiddlewareNotAResponse, a6 as SessionStorageInitError, a7 as SessionStorageSaveError, R as ROUTE_TYPE_HEADER, a8 as ForbiddenRewrite, a9 as ASTRO_VERSION, aa as CspNotEnabled, ab as LocalsReassigned, ac as generateCspDigest, ad as PrerenderClientAddressNotAvailable, w as clientAddressSymbol, ae as ClientAddressNotAvailable, af as StaticClientAddressNotAvailable, ag as AstroResponseHeadersReassigned, B as responseSentSymbol$1, ah as renderPage, ai as REWRITE_DIRECTIVE_HEADER_KEY, aj as REWRITE_DIRECTIVE_HEADER_VALUE, ak as renderEndpoint } from './astro/server_BZHMmTXm.mjs';
-import colors from 'piccolore';
+import { H as decryptString, J as createSlotValueFromString, K as isAstroComponentFactory, k as renderComponent, r as renderTemplate, q as REROUTE_DIRECTIVE_HEADER, A as AstroError, O as i18nNoLocaleFoundInPath, P as ResponseSentError, Q as originPathnameSymbol, S as RewriteWithBodyUsed, T as GetStaticPathsRequired, V as InvalidGetStaticPathsReturn, W as InvalidGetStaticPathsEntry, X as GetStaticPathsExpectedParams, Y as GetStaticPathsInvalidRouteParam, Z as PageNumberParamNotFound, D as DEFAULT_404_COMPONENT, _ as NoMatchingStaticPathFound, $ as PrerenderDynamicEndpointPathCollide, a0 as ReservedSlotName, a1 as renderSlotToString, a2 as renderJSX, a3 as chunkToString, a4 as isRenderInstruction, v as ActionNotFoundError, a5 as MiddlewareNoDataOrNextCalled, a6 as MiddlewareNotAResponse, a7 as SessionStorageInitError, a8 as SessionStorageSaveError, R as ROUTE_TYPE_HEADER, a9 as ForbiddenRewrite, aa as ASTRO_VERSION, ab as CspNotEnabled, w as s, ac as LocalsReassigned, ad as generateCspDigest, ae as PrerenderClientAddressNotAvailable, x as clientAddressSymbol, af as ClientAddressNotAvailable, ag as StaticClientAddressNotAvailable, ah as AstroResponseHeadersReassigned, C as responseSentSymbol$1, ai as renderPage, aj as REWRITE_DIRECTIVE_HEADER_KEY, ak as REWRITE_DIRECTIVE_HEADER_VALUE, al as renderEndpoint } from './astro/server_WahAFePi.mjs';
 import 'clsx';
 import 'es-module-lexer';
-import { g as getActionQueryString, a as deserializeActionResult, D as DEFAULT_404_ROUTE, A as ActionError, s as serializeActionResult, b as ACTION_RPC_ROUTE_PATTERN, c as ACTION_QUERY_PARAMS } from './astro-designed-error-pages_DPmBH_v2.mjs';
+import { g as getActionQueryString, a as deserializeActionResult, D as DEFAULT_404_ROUTE, A as ActionError, s as serializeActionResult, b as ACTION_RPC_ROUTE_PATTERN, c as ACTION_QUERY_PARAMS } from './astro-designed-error-pages_BLDMQ-f4.mjs';
 import { a as appendForwardSlash, j as joinPaths, r as removeTrailingForwardSlash, p as prependForwardSlash, t as trimSlashes } from './path_De6Se6hL.mjs';
 import { serialize, parse } from 'cookie';
 import { unflatten as unflatten$1, stringify as stringify$1 } from 'devalue';
@@ -2168,14 +2167,14 @@ class RenderContext {
         if (this.isPrerendered) {
           pipeline.logger.warn(
             "session",
-            `context.session was used when rendering the route ${colors.green(this.routePattern)}, but it is not available on prerendered routes. If you need access to sessions, make sure that the route is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your routes server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `context.session was used when rendering the route ${s.green(this.routePattern)}, but it is not available on prerendered routes. If you need access to sessions, make sure that the route is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your routes server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }
         if (!renderContext.session) {
           pipeline.logger.warn(
             "session",
-            `context.session was used when rendering the route ${colors.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `context.session was used when rendering the route ${s.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }
@@ -2377,14 +2376,14 @@ class RenderContext {
         if (this.isPrerendered) {
           pipeline.logger.warn(
             "session",
-            `Astro.session was used when rendering the route ${colors.green(this.routePattern)}, but it is not available on prerendered pages. If you need access to sessions, make sure that the page is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your pages server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `Astro.session was used when rendering the route ${s.green(this.routePattern)}, but it is not available on prerendered pages. If you need access to sessions, make sure that the page is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your pages server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }
         if (!renderContext.session) {
           pipeline.logger.warn(
             "session",
-            `Astro.session was used when rendering the route ${colors.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `Astro.session was used when rendering the route ${s.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }

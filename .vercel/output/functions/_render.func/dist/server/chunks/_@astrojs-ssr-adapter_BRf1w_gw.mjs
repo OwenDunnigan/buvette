@@ -1,15 +1,14 @@
-import { R as ROUTE_TYPE_HEADER, q as REROUTE_DIRECTIVE_HEADER, D as DEFAULT_404_COMPONENT, A as AstroError, v as ActionNotFoundError, w as clientAddressSymbol, x as LocalsNotAnObject, y as FailedToFindPageMapSSR, z as REROUTABLE_STATUS_CODES, B as responseSentSymbol, C as nodeRequestAbortControllerCleanupSymbol } from './astro/server_BZHMmTXm.mjs';
-import colors from 'piccolore';
+import { R as ROUTE_TYPE_HEADER, q as REROUTE_DIRECTIVE_HEADER, D as DEFAULT_404_COMPONENT, A as AstroError, v as ActionNotFoundError, w as s, x as clientAddressSymbol, y as LocalsNotAnObject, z as FailedToFindPageMapSSR, B as REROUTABLE_STATUS_CODES, C as responseSentSymbol, G as nodeRequestAbortControllerCleanupSymbol } from './astro/server_WahAFePi.mjs';
 import 'clsx';
-import { D as DEFAULT_404_ROUTE, d as default404Instance, e as ensure404Route } from './astro-designed-error-pages_DPmBH_v2.mjs';
+import { D as DEFAULT_404_ROUTE, d as default404Instance, e as ensure404Route } from './astro-designed-error-pages_BLDMQ-f4.mjs';
 import 'es-module-lexer';
 import buffer from 'node:buffer';
 import crypto$1 from 'node:crypto';
 import { Http2ServerResponse } from 'node:http2';
 import { f as fileExtension, j as joinPaths, s as slash, p as prependForwardSlash, r as removeTrailingForwardSlash, a as appendForwardSlash, b as isInternalPath, c as collapseDuplicateTrailingSlashes, h as hasFileExtension } from './path_De6Se6hL.mjs';
 import { m as matchPattern } from './index_BL6Pqka4.mjs';
-import { r as requestIs404Or500, i as isRequestServerIsland, n as notFound, a as redirectToFallback, b as redirectToDefaultLocale, c as requestHasLocale, e as normalizeTheLocale, d as defineMiddleware, S as SERVER_ISLAND_COMPONENT, f as SERVER_ISLAND_ROUTE, g as createEndpoint, R as RouteCache, s as sequence, h as findRouteToRewrite, v as validateAndDecodePathname, m as matchRoute, j as RenderContext, P as PERSIST_SYMBOL, k as getSetCookiesFromResponse } from './index_D2mdH1GV.mjs';
-import { N as NOOP_MIDDLEWARE_FN } from './noop-middleware_Coe1DdlH.mjs';
+import { r as requestIs404Or500, i as isRequestServerIsland, n as notFound, a as redirectToFallback, b as redirectToDefaultLocale, c as requestHasLocale, e as normalizeTheLocale, d as defineMiddleware, S as SERVER_ISLAND_COMPONENT, f as SERVER_ISLAND_ROUTE, g as createEndpoint, R as RouteCache, s as sequence, h as findRouteToRewrite, v as validateAndDecodePathname, m as matchRoute, j as RenderContext, P as PERSIST_SYMBOL, k as getSetCookiesFromResponse } from './index_D3CHFv-1.mjs';
+import { N as NOOP_MIDDLEWARE_FN } from './noop-middleware_6BqbSyK2.mjs';
 import '@vercel/routing-utils';
 import 'deterministic-object-hash';
 import nodePath from 'node:path';
@@ -348,7 +347,7 @@ function getEventPrefix({ level, label }) {
   const timestamp = `${dateTimeFormat.format(/* @__PURE__ */ new Date())}`;
   const prefix = [];
   if (level === "error" || level === "warn") {
-    prefix.push(colors.bold(timestamp));
+    prefix.push(s.bold(timestamp));
     prefix.push(`[${level.toUpperCase()}]`);
   } else {
     prefix.push(timestamp);
@@ -357,15 +356,15 @@ function getEventPrefix({ level, label }) {
     prefix.push(`[${label}]`);
   }
   if (level === "error") {
-    return colors.red(prefix.join(" "));
+    return s.red(prefix.join(" "));
   }
   if (level === "warn") {
-    return colors.yellow(prefix.join(" "));
+    return s.yellow(prefix.join(" "));
   }
   if (prefix.length === 1) {
-    return colors.dim(prefix[0]);
+    return s.dim(prefix[0]);
   }
-  return colors.dim(prefix[0]) + " " + colors.blue(prefix.splice(1).join(" "));
+  return s.dim(prefix[0]) + " " + s.blue(prefix.splice(1).join(" "));
 }
 class Logger {
   options;

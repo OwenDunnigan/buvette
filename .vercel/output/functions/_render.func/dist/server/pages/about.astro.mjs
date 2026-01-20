@@ -1,7 +1,6 @@
 /* empty css                                 */
-import { e as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_BZHMmTXm.mjs';
-import 'piccolore';
-import { $ as $$Layout } from '../chunks/Layout_suSCPUFW.mjs';
+import { e as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_WahAFePi.mjs';
+import { $ as $$Layout } from '../chunks/Layout_D9C_BpK-.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$About = createComponent(($$result, $$props, $$slots) => {
