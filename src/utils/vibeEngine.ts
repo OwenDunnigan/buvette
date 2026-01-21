@@ -56,8 +56,19 @@ async function getJetsContext(): Promise<JetsStatus> {
     try {
         const todayStr = new Date().toISOString().split('T')[0];
 
+        // Calculate yesterday's date
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yStr = yesterday.toISOString().split('T')[0];
+
+        // Start both fetches in parallel
+        // We attach a catch handler to yesterdayPromise to prevent unhandled rejections if we return early
+        const todayPromise = fetch(`https://api-web.nhle.com/v1/score/${todayStr}`);
+        const yesterdayPromise = fetch(`https://api-web.nhle.com/v1/score/${yStr}`);
+        yesterdayPromise.catch(() => {});
+
         // 1. Fetch the Scoreboard for TODAY
-        const res = await fetch(`https://api-web.nhle.com/v1/score/${todayStr}`);
+        const res = await todayPromise;
         if (!res.ok) return 'NONE';
         const data = await res.json();
 
@@ -76,11 +87,7 @@ async function getJetsContext(): Promise<JetsStatus> {
         }
 
         // 3. CHECK: Did they play yesterday?
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yStr = yesterday.toISOString().split('T')[0];
-
-        const yRes = await fetch(`https://api-web.nhle.com/v1/score/${yStr}`);
+        const yRes = await yesterdayPromise;
         if (!yRes.ok) return 'NONE';
         const yData = await yRes.json();
 
