@@ -8,4 +8,9 @@ export default defineConfig({
   output: 'server',
   adapter: vercel(),
   integrations: [tailwind()],
+  vite: {
+    ssr: {
+      noExternal: ['piccolore'],
+    },
+  },
 });
