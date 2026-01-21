@@ -13,7 +13,15 @@ export interface MenuData {
   [category: string]: MenuItem[];
 }
 
+let cachedData: MenuData | null = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 60_000; // 1 minute
+
 export async function getMenuData(): Promise<MenuData> {
+  if (cachedData && Date.now() - lastFetchTime < CACHE_TTL) {
+    return cachedData;
+  }
+
   const csvUrl = import.meta.env.MENU_CSV_URL;
   let csvText = '';
 
@@ -36,7 +44,7 @@ export async function getMenuData(): Promise<MenuData> {
     try {
       console.log('No MENU_CSV_URL provided, reading from public/menu.csv');
       const localPath = path.resolve('./public/menu.csv');
-      csvText = fs.readFileSync(localPath, 'utf-8');
+      csvText = await fs.promises.readFile(localPath, 'utf-8');
     } catch (error) {
       console.error('Error reading local CSV:', error);
       return {};
@@ -63,6 +71,9 @@ export async function getMenuData(): Promise<MenuData> {
     }
     return acc;
   }, {} as MenuData);
+
+  cachedData = grouped;
+  lastFetchTime = Date.now();
 
   return grouped;
 }
