@@ -1,13 +1,16 @@
 ---
-import { THEMES, type ThemeKey } from '../themes';
+import { THEMES, type ThemeKey, type ThemeConfig } from '../themes';
 
 interface Props {
-  currentTheme: ThemeKey;
+  currentTheme: ThemeKey | ThemeConfig;
   windSpeed: number; // 0 to 50 km/h
 }
 
 const { currentTheme, windSpeed } = Astro.props;
-const config = THEMES[currentTheme] || THEMES['NORMAL'];
+const rawConfig = (typeof currentTheme === 'string' ? THEMES[currentTheme] : currentTheme);
+// Fallback to NORMAL if the provided theme doesn't match the expected structure (missing typography)
+// This handles the case where vibeEngine passes a 'src/utils/themes.ts' Theme object
+const config = (rawConfig && 'typography' in rawConfig) ? rawConfig : THEMES['NORMAL'];
 
 // Calculate dynamic font adjustments based on Real-Time Wind
 // (The theme sets the BASE, the wind adds the DELTA)

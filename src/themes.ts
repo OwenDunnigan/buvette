@@ -40,6 +40,8 @@ export interface ThemeConfig {
   };
 }
 
+export type Theme = ThemeConfig;
+
 export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 1. THE DEFAULT (Baseline) ---

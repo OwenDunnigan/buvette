@@ -13,8 +13,6 @@ const { vibe } = Astro.locals;
 const { viscosity, windForce, temp, windSpeed } = vibe.weather;
 const theme = vibe.theme;
 
-// Calculate windSpeed from windForce (0-1) -> (0-50) for the VibeInjector
-const windSpeed = windForce * 50;
 
 // Calculate tempMood: 0 (Cold -30) to 1 (Hot +30)
 const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
