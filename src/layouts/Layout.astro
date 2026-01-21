@@ -21,7 +21,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 <!doctype html>
 <html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.palette.primary}; --contrast-level: ${theme.visuals.contrast}; --blur-amount: ${theme.visuals.blur};`}>
 	<head>
-		<VibeInjector currentTheme={theme} windSpeed={WindSpeed} />
+		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<Analytics />
 		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette Restaurant" />
