@@ -1,5 +1,6 @@
 ---
 import VibeInjector from '../components/VibeInjector.astro';
+import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
@@ -19,6 +20,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 <html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.palette.primary}; --contrast-level: ${theme.visuals.contrast}; --blur-amount: ${theme.visuals.blur};`}>
 	<head>
 		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
+		<Analytics />
 		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette Restaurant" />
 		<meta name="viewport" content="width=device-width" />
