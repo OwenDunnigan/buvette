@@ -14,7 +14,7 @@ const { viscosity, windForce, temp } = vibe.weather;
 const theme = vibe.theme;
 
 // Calculate windSpeed from windForce (0-1) -> (0-50) for the VibeInjector
-const windSpeed = windForce * 50;
+const injectorWindSpeed = windForce * 50;
 
 // Calculate tempMood: 0 (Cold -30) to 1 (Hot +30)
 const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
@@ -23,7 +23,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 <!doctype html>
 <html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.palette.primary}; --contrast-level: ${theme.visuals.contrast}; --blur-amount: ${theme.visuals.blur};`}>
 	<head>
-		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
+		<VibeInjector currentTheme={theme} windSpeed={injectorWindSpeed} />
 		<Analytics />
 		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette Restaurant" />
