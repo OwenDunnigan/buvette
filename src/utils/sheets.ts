@@ -36,7 +36,7 @@ export async function getMenuData(): Promise<MenuData> {
     try {
       console.log('No MENU_CSV_URL provided, reading from public/menu.csv');
       const localPath = path.resolve('./public/menu.csv');
-      csvText = fs.readFileSync(localPath, 'utf-8');
+      csvText = await fs.promises.readFile(localPath, 'utf-8');
     } catch (error) {
       console.error('Error reading local CSV:', error);
       return {};
