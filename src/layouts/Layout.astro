@@ -32,12 +32,12 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 		<title>{title} | Buvette</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&family=Sono:wght,MONO@200..800,0..1&display=swap" rel="stylesheet">
 	</head>
 	<body class={`font-mono text-stone-800 bg-stone-50 flex flex-col min-h-screen ${theme.mode}`}>
 		<header class="py-6 border-b border-stone-200">
             <div class="container mx-auto px-4 flex justify-between items-center">
-                <a href="/" class="text-3xl font-display font-bold tracking-tight">Buvette</a>
+                <a href="/" class="text-3xl font-logo tracking-tight">Buvette</a>
                 <nav>
                     <ul class="flex justify-center space-x-6 text-sm font-bold uppercase">
                         <li><a href="/" class="hover:bg-black hover:text-white px-1 transition-colors">Home</a></li>
@@ -168,5 +168,11 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
     .glare-overlay {
         opacity: var(--contrast-level);
         filter: blur(var(--blur-amount));
+    }
+
+    .font-logo {
+        font-family: 'Sono', monospace;
+        font-variation-settings: 'wght' 392, 'MONO' 0.47;
+        font-weight: 392;
     }
 </style>
