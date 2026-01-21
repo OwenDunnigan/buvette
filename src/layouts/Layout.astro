@@ -1,5 +1,6 @@
 ---
 import VibeInjector from '../components/VibeInjector.astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
 	title: string;
@@ -111,6 +112,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
                 <p class="text-stone-400 text-sm">&copy; {new Date().getFullYear()} Buvette. All rights reserved.</p>
             </div>
         </footer>
+		<SpeedInsights />
 	</body>
 </html>
 
