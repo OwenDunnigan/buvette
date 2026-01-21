@@ -10,7 +10,7 @@ interface Props {
 
 const { title, useDefaultContainer = true } = Astro.props;
 const { vibe } = Astro.locals;
-const { viscosity, windForce, temp, windSpeed } = vibe.weather;
+const { viscosity, windForce, temp } = vibe.weather;
 const theme = vibe.theme;
 
 // Calculate windSpeed from windForce (0-1) -> (0-50) for the VibeInjector

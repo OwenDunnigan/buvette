@@ -13,7 +13,15 @@ export interface MenuData {
   [category: string]: MenuItem[];
 }
 
+let cachedData: MenuData | null = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 60_000; // 1 minute
+
 export async function getMenuData(): Promise<MenuData> {
+  if (cachedData && Date.now() - lastFetchTime < CACHE_TTL) {
+    return cachedData;
+  }
+
   const csvUrl = import.meta.env.MENU_CSV_URL;
   let csvText = '';
 
@@ -63,6 +71,9 @@ export async function getMenuData(): Promise<MenuData> {
     }
     return acc;
   }, {} as MenuData);
+
+  cachedData = grouped;
+  lastFetchTime = Date.now();
 
   return grouped;
 }
