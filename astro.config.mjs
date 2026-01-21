@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [tailwind()],
   vite: {
     ssr: {
-      noExternal: ['piccolore'],
+      noExternal: ['piccolore', 'clsx'],
     },
   },
 });
