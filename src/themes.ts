@@ -13,7 +13,14 @@ export type ThemeKey =
   | 'NORTH_WIND'
   | 'SMOKE'
   | 'WHITE_OUT'
-  | 'FLOOD';
+  | 'FLOOD'
+  // --- Ported from Lite Themes ---
+  | 'NEUTRAL_RESPECTFUL'
+  | 'COZY_SOMBER'
+  | 'MANIC_PARTY'
+  | 'VICTORY_COLD'
+  | 'VICTORY_PATIO'
+  | 'HYGGE_MODE';
 
 export interface ThemeConfig {
   id: ThemeKey;       // Unique ID
@@ -56,6 +63,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   },
 
   // --- 2. THE BUNKER (High Anxiety / Extreme Cold) ---
+  // Merged with BUNKER_STORM
   'BUNKER': {
     id: 'BUNKER',
     label: "Shelter Mode",
@@ -71,6 +79,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   },
 
   // --- 3. SUN DOG (The Beautiful Lie) ---
+  // Merged with SUN_DOG_GLARE
   'SUN_DOG': {
     id: 'SUN_DOG',
     label: "Sundog Glare",
@@ -116,6 +125,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   },
 
   // --- 6. MOSQUITO SWARM (High Humidity + Heat) ---
+  // Merged with SWAMP_HUMIDITY
   'MOSQUITO_SWARM': {
     id: 'MOSQUITO_SWARM',
     label: "Humidex Warning",
@@ -145,7 +155,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
     effects: { contrast: 110, blur: '0px', noise: 0.1, saturate: 100 } // Dusty grain
   },
 
-  // --- 8. VICTORY LAP (Jets Win) ---
+  // --- 8. VICTORY LAP (Jets Win - Generic) ---
   'VICTORY_LAP': {
     id: 'VICTORY_LAP',
     label: "WPG Victory",
@@ -161,6 +171,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   },
 
   // --- 9. NORTH WIND (Arctic Blast) ---
+  // Merged with ICE_SHELL
   'NORTH_WIND': {
     id: 'NORTH_WIND',
     label: "Windchill -40",
@@ -176,6 +187,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   },
 
   // --- 10. SMOKE (Forest Fires) ---
+  // Merged with HAZE_DYSTOPIA
   'SMOKE': {
     id: 'SMOKE',
     label: "Air Quality 10+",
@@ -220,7 +232,8 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
     effects: { contrast: 90, blur: '1px', noise: 0.1, saturate: 80 } // Murky
   },
 
-  // Fallbacks...
+  // --- Fallbacks / Specifics Ported from Lite ---
+
   'DEEP_FREEZE': {
       id: 'DEEP_FREEZE',
       label: "Deep Freeze",
@@ -236,5 +249,55 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
       physics: { viscosity: 0.9, cursor: 'default' },
       typography: { casual: 0.8, slant: 0, weight: 400 },
       effects: { contrast: 105, blur: '0px', noise: 0.02, saturate: 115 }
+  },
+
+  // --- NEW PORTED THEMES ---
+  'NEUTRAL_RESPECTFUL': {
+    id: 'NEUTRAL_RESPECTFUL',
+    label: "Observance",
+    colors: { bg: '#F5F5F5', text: '#111111', accent: '#555555', surface: '#FFFFFF' },
+    physics: { viscosity: 1.0, cursor: 'default' },
+    typography: { casual: 0, slant: 0, weight: 400 }, // Somber, straight
+    effects: { contrast: 100, blur: '0px', noise: 0.0, saturate: 50 } // Desaturated
+  },
+  'COZY_SOMBER': {
+    id: 'COZY_SOMBER',
+    label: "Hygge Dark",
+    colors: { bg: '#2B1B17', text: '#D2B48C', accent: '#8B4513', surface: '#3E2723' },
+    physics: { viscosity: 1.2, cursor: 'default' },
+    typography: { casual: 1.0, slant: 0, weight: 500 }, // Warm, soft
+    effects: { contrast: 90, blur: '0px', noise: 0.05, saturate: 90 }
+  },
+  'MANIC_PARTY': {
+    id: 'MANIC_PARTY',
+    label: "Social Override",
+    colors: { bg: '#FFF0F5', text: '#000000', accent: '#FF00FF', surface: '#FFFFFF' },
+    physics: { viscosity: 0.8, cursor: 'pointer' },
+    typography: { casual: 1.0, slant: -5, weight: 700 },
+    effects: { contrast: 110, blur: '0px', noise: 0.0, saturate: 150 }
+  },
+  'VICTORY_COLD': {
+    id: 'VICTORY_COLD',
+    label: "True North Strong",
+    colors: { bg: '#001F3F', text: '#FFFFFF', accent: '#004C97', surface: '#003366' },
+    physics: { viscosity: 0.7, cursor: 'default' },
+    typography: { casual: 0, slant: -15, weight: 800 },
+    effects: { contrast: 130, blur: '0px', noise: 0.05, saturate: 100 }
+  },
+  'VICTORY_PATIO': {
+    id: 'VICTORY_PATIO',
+    label: "Whiteout Party",
+    colors: { bg: '#E6F3FF', text: '#002244', accent: '#004C97', surface: '#FFFFFF' },
+    physics: { viscosity: 0.9, cursor: 'default' },
+    typography: { casual: 0.5, slant: -5, weight: 600 },
+    effects: { contrast: 110, blur: '0px', noise: 0.0, saturate: 120 }
+  },
+  'HYGGE_MODE': {
+    id: 'HYGGE_MODE',
+    label: "Cabin Vibe",
+    colors: { bg: '#FAF0E6', text: '#4A3B32', accent: '#DEB887', surface: '#FFFFFF' },
+    physics: { viscosity: 1.0, cursor: 'default' },
+    typography: { casual: 1.0, slant: 0, weight: 400 },
+    effects: { contrast: 95, blur: '0px', noise: 0.02, saturate: 100 }
   },
 };

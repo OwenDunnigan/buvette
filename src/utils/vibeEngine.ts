@@ -115,11 +115,11 @@ function deriveTheme(ctx: WinnipegContext): Theme {
     if (ctx.weather.precipType === 'ice') return THEMES.NORTH_WIND; // Ice/Freezing Rain
 
     // --- PRIORITY 2: RESPECT ---
-    if (ctx.temporal.isBlackoutDate) return THEMES.NORMAL;
+    if (ctx.temporal.isBlackoutDate) return THEMES.NEUTRAL_RESPECTFUL;
 
     // --- PRIORITY 3: MANUAL OVERRIDE ---
-    if (ctx.social.manualOverride === 'FORCE_SOMBER') return THEMES.BUNKER;
-    if (ctx.social.manualOverride === 'FORCE_PARTY') return THEMES.VICTORY_LAP;
+    if (ctx.social.manualOverride === 'FORCE_SOMBER') return THEMES.COZY_SOMBER;
+    if (ctx.social.manualOverride === 'FORCE_PARTY') return THEMES.MANIC_PARTY;
 
     // --- PRIORITY 4: SPECIFIC PHENOMENA ---
     if (ctx.weather.isSunLie) return THEMES.SUN_DOG;
@@ -127,7 +127,7 @@ function deriveTheme(ctx: WinnipegContext): Theme {
 
     // --- PRIORITY 5: SOCIAL MODIFIERS ---
     if (ctx.social.jetsStatus === 'VICTORY') {
-        return THEMES.VICTORY_LAP;
+        return ctx.weather.temp < 0 ? THEMES.VICTORY_COLD : THEMES.VICTORY_PATIO;
     }
 
     // --- PRIORITY 6: BASELINE ---
@@ -150,7 +150,7 @@ function deriveTheme(ctx: WinnipegContext): Theme {
         return THEMES.SLUSH;
     }
 
-    return THEMES.NORMAL;
+    return THEMES.HYGGE_MODE;
 }
 
 function getPrecipType(wmoCode: number, temp: number): 'none' | 'snow' | 'rain' | 'ice' {
