@@ -16,6 +16,7 @@ export type ThemeKey =
   | 'FLOOD';
 
 export interface ThemeConfig {
+  id: ThemeKey;       // Unique ID
   label: string;      // The "Vibe Name" displayed in the corner
   colors: {
     bg: string;       // Main background
@@ -46,6 +47,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 1. THE DEFAULT (Baseline) ---
   'NORMAL': {
+    id: 'NORMAL',
     label: "Winnipeg, MB",
     colors: { bg: '#F5F5F0', text: '#1A1A1A', accent: '#0055FF', surface: '#FFFFFF' },
     physics: { viscosity: 1.0, cursor: 'default' },
@@ -55,6 +57,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 2. THE BUNKER (High Anxiety / Extreme Cold) ---
   'BUNKER': {
+    id: 'BUNKER',
     label: "Shelter Mode",
     colors: {
       bg: '#0F0E0E',       // Obsidian
@@ -69,6 +72,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 3. SUN DOG (The Beautiful Lie) ---
   'SUN_DOG': {
+    id: 'SUN_DOG',
     label: "Sundog Glare",
     colors: {
       bg: '#FFFFFF',
@@ -83,6 +87,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 4. SLUSH REALITY (The "Dirty Spring") ---
   'SLUSH': {
+    id: 'SLUSH',
     label: "Melt Phase",
     colors: {
       bg: '#C4C2BC',       // Wet Concrete
@@ -97,6 +102,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 5. PRAIRIE GOLD (Perfect Summer) ---
   'PRAIRIE_GOLD': {
+    id: 'PRAIRIE_GOLD',
     label: "Golden Hour",
     colors: {
       bg: '#FFF8E1',       // Warm Wheat
@@ -111,6 +117,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 6. MOSQUITO SWARM (High Humidity + Heat) ---
   'MOSQUITO_SWARM': {
+    id: 'MOSQUITO_SWARM',
     label: "Humidex Warning",
     colors: {
       bg: '#E8F5E9',       // Swamp Green tint
@@ -125,6 +132,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 7. CONSTRUCTION SEASON (The "Other" Season) ---
   'CONSTRUCTION': {
+    id: 'CONSTRUCTION',
     label: "Detour Ahead",
     colors: {
       bg: '#FFF3E0',       // Dust
@@ -139,6 +147,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 8. VICTORY LAP (Jets Win) ---
   'VICTORY_LAP': {
+    id: 'VICTORY_LAP',
     label: "WPG Victory",
     colors: {
       bg: '#F0F4F8',       // Ice White
@@ -153,6 +162,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 9. NORTH WIND (Arctic Blast) ---
   'NORTH_WIND': {
+    id: 'NORTH_WIND',
     label: "Windchill -40",
     colors: {
       bg: '#E0F7FA',       // Icy Blue
@@ -167,6 +177,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 10. SMOKE (Forest Fires) ---
   'SMOKE': {
+    id: 'SMOKE',
     label: "Air Quality 10+",
     colors: {
       bg: '#D7CCC8',       // Hazy Grey/Brown
@@ -181,6 +192,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 11. WHITE OUT (Blizzard) ---
   'WHITE_OUT': {
+    id: 'WHITE_OUT',
     label: "Zero Visibility",
     colors: {
       bg: '#FAFAFA',       // White
@@ -195,6 +207,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // --- 12. FLOOD (Spring Rising) ---
   'FLOOD': {
+    id: 'FLOOD',
     label: "Sandbag Duty",
     colors: {
       bg: '#8D6E63',       // Mud
@@ -209,6 +222,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
 
   // Fallbacks...
   'DEEP_FREEZE': {
+      id: 'DEEP_FREEZE',
       label: "Deep Freeze",
       colors: { bg: '#263238', text: '#ECEFF1', accent: '#0288D1', surface: '#37474F' },
       physics: { viscosity: 2.0, cursor: 'default' },
@@ -216,6 +230,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
       effects: { contrast: 120, blur: '0px', noise: 0.1, saturate: 80 }
   },
   'FALSE_SPRING': {
+      id: 'FALSE_SPRING',
       label: "Fool's Spring",
       colors: { bg: '#FFFDE7', text: '#33691E', accent: '#C6FF00', surface: '#FFFFFF' },
       physics: { viscosity: 0.9, cursor: 'default' },

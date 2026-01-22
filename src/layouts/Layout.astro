@@ -19,7 +19,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 ---
 
 <!doctype html>
-<html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.palette.primary}; --contrast-level: ${theme.visuals.contrast}; --blur-amount: ${theme.visuals.blur};`}>
+<html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.colors.accent}; --contrast-level: ${theme.effects.contrast / 100}; --blur-amount: ${theme.effects.blur};`}>
 	<head>
 		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<Analytics />
@@ -28,13 +28,13 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-        <meta name="theme-color" content={theme.palette.primary} />
+        <meta name="theme-color" content={theme.colors.accent} />
 		<title>{title} | Buvette</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&family=Sono:wght,MONO@200..800,0..1&display=swap" rel="stylesheet">
 	</head>
-	<body class={`font-mono text-stone-800 bg-stone-50 flex flex-col min-h-screen ${theme.mode}`}>
+	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id}`}>
 		<header class="py-6 border-b border-stone-200">
             <div class="container mx-auto px-4 flex justify-between items-center">
                 <a href="/" class="text-3xl font-logo tracking-tight">Buvette</a>
