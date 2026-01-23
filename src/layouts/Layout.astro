@@ -35,13 +35,16 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&family=Sono:wght,MONO@200..800,0..1&display=swap" rel="stylesheet">
 	</head>
 	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id}`}>
-		<header class="py-6 border-b border-stone-200">
+		{/* Victory Stripe - 4px Jets Blue when they win */}
+		{vibe.social.jetsStatus === 'VICTORY' && (
+			<div class="fixed top-0 left-0 right-0 h-1 bg-[#041E42] z-50" aria-label="Jets Victory Banner"></div>
+		)}
+		<header class={`py-6 border-b border-stone-200 ${vibe.social.jetsStatus === 'VICTORY' ? 'mt-1' : ''}`}>
             <div class="container mx-auto px-4 flex justify-between items-center">
                 <a href="/" class="text-3xl font-logo tracking-tight">Buvette</a>
                 <nav>
                     <ul class="flex justify-center space-x-6 text-sm font-bold uppercase">
                         <li><a href="/" class="hover:bg-black hover:text-white px-1 transition-colors">Home</a></li>
-                        <li><a href="/menu" class="hover:bg-black hover:text-white px-1 transition-colors">Menu</a></li>
                         <li><a href="/about" class="hover:bg-black hover:text-white px-1 transition-colors">About</a></li>
                     </ul>
                 </nav>

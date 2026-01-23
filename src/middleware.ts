@@ -3,10 +3,11 @@ import { getWinnipegContext } from './utils/vibeEngine';
 import { THEMES, type ThemeKey } from './themes';
 
 export const onRequest = defineMiddleware(async (context, next) => {
-    const rawVibe = await getWinnipegContext();
+    // Parse mockTemp from URL
+    const mockTempStr = context.url.searchParams.get('mockTemp');
+    const mockTemp = mockTempStr ? parseFloat(mockTempStr) : undefined;
 
-    // Shallow clone to avoid mutating the shared cache
-    const vibe = { ...rawVibe };
+    const vibe = await getWinnipegContext({ temp: mockTemp });
 
     const themeOverride = context.url.searchParams.get('theme');
     if (themeOverride && themeOverride in THEMES) {

@@ -1,6 +1,70 @@
 import Papa from 'papaparse';
 import fs from 'node:fs';
 import path from 'node:path';
+import type { ThemeKey } from '../themes';
+
+// --- Vibe Override Types ---
+export type VibeOverrideMode = 'AUTO' | 'FORCE_SOMBER' | 'FORCE_PARTY' | 'FORCE_COZY' | 'FORCE_VICTORY';
+
+export interface VibeOverrideRow {
+  Active: string;          // "TRUE" or "FALSE"
+  Mode: VibeOverrideMode;
+  Message: string;         // Optional custom message
+  ExpiresAt: string;       // ISO date string or empty
+}
+
+let vibeCache: { data: VibeOverrideRow | null; timestamp: number } | null = null;
+const VIBE_CACHE_TTL = 60_000; // 1 minute
+
+export async function getVibeOverride(): Promise<VibeOverrideRow | null> {
+  if (vibeCache && Date.now() - vibeCache.timestamp < VIBE_CACHE_TTL) {
+    return vibeCache.data;
+  }
+
+  const csvUrl = import.meta.env.VIBE_CSV_URL;
+  let csvText = '';
+
+  if (csvUrl) {
+    try {
+      const response = await fetch(csvUrl);
+      if (!response.ok) throw new Error(`Failed to fetch vibe CSV: ${response.statusText}`);
+      csvText = await response.text();
+    } catch (error) {
+      console.error('Error fetching vibe CSV:', error);
+      vibeCache = { data: null, timestamp: Date.now() };
+      return null;
+    }
+  } else {
+    // Fallback to local file
+    try {
+      const localPath = path.resolve('./public/vibe_override.csv');
+      csvText = await fs.promises.readFile(localPath, 'utf-8');
+    } catch {
+      // No override file exists, that's fine
+      vibeCache = { data: null, timestamp: Date.now() };
+      return null;
+    }
+  }
+
+  const { data } = Papa.parse<VibeOverrideRow>(csvText, {
+    header: true,
+    skipEmptyLines: true,
+  });
+
+  // Find the first active, non-expired override
+  const now = new Date();
+  const activeOverride = data.find((row: VibeOverrideRow) => {
+    if (row.Active?.toUpperCase() !== 'TRUE') return false;
+    if (row.ExpiresAt) {
+      const expires = new Date(row.ExpiresAt);
+      if (expires < now) return false;
+    }
+    return true;
+  });
+
+  vibeCache = { data: activeOverride ?? null, timestamp: Date.now() };
+  return vibeCache.data;
+}
 
 export interface MenuItem {
   Category: string;
