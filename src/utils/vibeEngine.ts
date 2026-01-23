@@ -1,4 +1,4 @@
-import { THEMES, type Theme } from './themes';
+import { THEMES, type ThemeConfig as Theme } from '../themes';
 
 // --- Types ---
 
@@ -110,9 +110,9 @@ async function getJetsContext(): Promise<JetsStatus> {
 
 function deriveTheme(ctx: WinnipegContext): Theme {
     // --- PRIORITY 1: DANGER ---
-    if (ctx.weather.wmoCode >= 90) return THEMES.BUNKER_STORM;
-    if (ctx.weather.isSmoke) return THEMES.HAZE_DYSTOPIA;
-    if (ctx.weather.precipType === 'ice') return THEMES.ICE_SHELL;
+    if (ctx.weather.wmoCode >= 90) return THEMES.BUNKER; // Thunderstorm/Severe
+    if (ctx.weather.isSmoke) return THEMES.SMOKE;
+    if (ctx.weather.precipType === 'ice') return THEMES.NORTH_WIND; // Ice/Freezing Rain
 
     // --- PRIORITY 2: RESPECT ---
     if (ctx.temporal.isBlackoutDate) return THEMES.NEUTRAL_RESPECTFUL;
@@ -122,8 +122,8 @@ function deriveTheme(ctx: WinnipegContext): Theme {
     if (ctx.social.manualOverride === 'FORCE_PARTY') return THEMES.MANIC_PARTY;
 
     // --- PRIORITY 4: SPECIFIC PHENOMENA ---
-    if (ctx.weather.isSunLie) return THEMES.SUN_DOG_GLARE;
-    if (ctx.weather.apparentTemp > 35 && ctx.weather.temp < 30) return THEMES.SWAMP_HUMIDITY;
+    if (ctx.weather.isSunLie) return THEMES.SUN_DOG;
+    if (ctx.weather.apparentTemp > 35 && ctx.weather.temp < 30) return THEMES.MOSQUITO_SWARM;
 
     // --- PRIORITY 5: SOCIAL MODIFIERS ---
     if (ctx.social.jetsStatus === 'VICTORY') {
@@ -135,9 +135,21 @@ function deriveTheme(ctx: WinnipegContext): Theme {
         if (ctx.weather.temp > -5) return THEMES.FALSE_SPRING;
     }
 
-    if (ctx.metrics.deviation < -10 && ctx.weather.temp < -25) return THEMES.DEEP_FREEZE_GRIND;
+    if (ctx.metrics.deviation < -10 && ctx.weather.temp < -25) return THEMES.DEEP_FREEZE;
+
+    // Blizzard / Whiteout check
+    // WMO 75: Heavy snow.
+    if (ctx.weather.wmoCode === 75 || (ctx.weather.precipType === 'snow' && ctx.weather.windSpeed > 40)) {
+        return THEMES.WHITE_OUT;
+    }
 
     if (ctx.weather.temp > 20) return THEMES.PRAIRIE_GOLD;
+
+    // Slush check (Melt phase)
+    if (ctx.weather.temp > 0 && ctx.weather.temp < 5 && ctx.weather.precipType !== 'none') {
+        return THEMES.SLUSH;
+    }
+
     return THEMES.HYGGE_MODE;
 }
 
@@ -271,7 +283,7 @@ export async function getWinnipegContext(): Promise<WinnipegContext> {
             deltaShock,
             deviation: 0 // Placeholder
         },
-        theme: THEMES.HYGGE_MODE // Placeholder, will be overwritten
+        theme: THEMES.NORMAL // Placeholder, will be overwritten
     };
 
     ctx.theme = deriveTheme(ctx);

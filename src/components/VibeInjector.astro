@@ -21,35 +21,30 @@ const finalWeight = config.typography.weight + (windForce * 100); // Bulwark aga
 // Inline SVG for noise (data URI)
 const noiseSvg = `data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E`;
 
----
-
-<!-- Import Recursive Font -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&display=swap" rel="stylesheet">
-
-<style define:vars={{
-  'theme-bg': config.colors.bg,
-  'theme-text': config.colors.text,
-  'theme-accent': config.colors.accent,
-  'theme-surface': config.colors.surface,
-
-  'phys-viscosity': `${config.physics.viscosity}s`,
-  'phys-cursor': config.physics.cursor,
-
-  'type-casual': config.typography.casual,
-  'type-slant': finalSlant,
-  'type-weight': finalWeight,
-
-  'fx-contrast': `${config.effects.contrast}%`,
-  'fx-blur': config.effects.blur,
-  'fx-noise': config.effects.noise,
-  'fx-saturate': `${config.effects.saturate}%`,
-
-  'noise-url': `url("${noiseSvg}")`
-}}>
-  /* 1. Global Color Transition */
+const cssVariables = `
   :root {
+    --theme-bg: ${config.colors.bg};
+    --theme-text: ${config.colors.text};
+    --theme-accent: ${config.colors.accent};
+    --theme-surface: ${config.colors.surface};
+
+    --phys-viscosity: ${config.physics.viscosity}s;
+    --phys-cursor: ${config.physics.cursor};
+
+    --type-casual: ${config.typography.casual};
+    --type-slant: ${finalSlant};
+    --type-weight: ${finalWeight};
+
+    --fx-contrast: ${config.effects.contrast}%;
+    --fx-blur: ${config.effects.blur};
+    --fx-noise: ${config.effects.noise};
+    --fx-saturate: ${config.effects.saturate}%;
+
+    --noise-url: url("${noiseSvg}");
+  }
+
+  /* 1. Global Color Transition */
+  body {
     background-color: var(--theme-bg);
     color: var(--theme-text);
     transition: background-color 0.8s ease, color 0.5s ease;
@@ -142,4 +137,12 @@ const noiseSvg = `data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://
     background-image: linear-gradient(to top, #5D4037 0%, transparent 20%);
     background-attachment: fixed;
   }
-</style>
+`;
+---
+
+<!-- Import Recursive Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&display=swap" rel="stylesheet">
+
+<style is:global set:html={cssVariables} />
