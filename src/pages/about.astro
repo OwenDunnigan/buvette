@@ -1,9 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const { vibe } = Astro.locals;
 ---
 
 <Layout title="About">
-  <div class="max-w-2xl mx-auto">
+  <!-- Scroll-responsive App Bar -->
+  <header id="about-app-bar" class={`fixed top-0 left-0 right-0 z-50 py-4 transition-transform duration-300 ${vibe.social.jetsStatus === 'VICTORY' ? 'mt-2' : ''}`} style="border-bottom: 2px dashed var(--theme-text); background-color: var(--theme-bg); color: var(--theme-text);">
+      <div class="container mx-auto px-4 text-center md:text-left">
+          <a href="/" class="text-4xl font-logo tracking-tight hover:opacity-70 transition-opacity">Buvette</a>
+      </div>
+  </header>
+
+  <div class="max-w-[60vw] mx-auto pt-28">
       <div class="text-center mb-12 pb-4 border-b-2 border-stone-900 border-dashed">
         <h1 class="text-4xl font-display font-bold uppercase tracking-[0.2em]">About Us</h1>
         <p class="text-xs font-mono uppercase mt-2">Est. 2021 &mdash; Winnipeg, MB</p>
@@ -73,3 +82,42 @@ import Layout from '../layouts/Layout.astro';
       </div>
   </div>
 </Layout>
+
+<script>
+  function initAppBar() {
+    const header = document.getElementById('about-app-bar');
+    if (!header) return;
+
+    let lastScroll = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      
+      // Add a small threshold to avoid jitter and bounce effects
+      if (Math.abs(currentScroll - lastScroll) < 10) return;
+
+      if (currentScroll > lastScroll && currentScroll > 60) {
+        // Scrolling down -> hide the header entirely
+        // -150% ensures it's completely off-screen including padding/margins
+        header.style.transform = 'translateY(-150%)';
+      } else {
+        // Scrolling up -> show the header
+        header.style.transform = 'translateY(0)';
+      }
+      
+      lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+    };
+
+    // Attach scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Clean up when view transitions out
+    document.addEventListener('astro:before-swap', () => {
+        window.removeEventListener('scroll', handleScroll);
+    }, { once: true });
+  }
+
+  // Initialize on full load or Astro view transition page load
+  initAppBar();
+  document.addEventListener('astro:page-load', initAppBar);
+</script>

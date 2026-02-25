@@ -29,6 +29,12 @@ const welcomeMessage = getDynamicMessage({
 ---
 
 <Layout title="Home" useDefaultContainer={false}>
+  <!-- Floating About Link -->
+  <a href="/about" 
+     class="floating-about fixed top-6 right-6 z-50 text-lg font-bold uppercase transition-transform hover:scale-105">
+    About
+  </a>
+
   <!-- Main Wrapper: Split on Desktop, Stacked on Mobile -->
   <div class="flex flex-col md:flex-row min-h-screen">
 
@@ -325,3 +331,20 @@ const welcomeMessage = getDynamicMessage({
         if (cleanupParallax) cleanupParallax();
     });
 </script>
+
+<style>
+  /* Floating About Link Theme Logic */
+  .floating-about {
+    /* Mobile: Placed over the video, needs light glowing text */
+    color: var(--theme-hero-text);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+
+  @media (min-width: 768px) {
+    .floating-about {
+      /* Desktop: Placed over the content background, needs standard text color */
+      color: var(--theme-text);
+      text-shadow: none;
+    }
+  }
+</style>

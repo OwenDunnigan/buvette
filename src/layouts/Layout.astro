@@ -40,19 +40,6 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 		{vibe.social.jetsStatus === 'VICTORY' && (
 			<div class="fixed top-0 left-0 right-0 h-2 z-50 jets-victory-stripe" aria-label="Jets Victory Banner"></div>
 		)}
-		<header class={`py-6 border-b border-stone-200 dark:border-stone-800 ${vibe.social.jetsStatus === 'VICTORY' ? 'mt-2' : ''}`}>
-            <div class="container mx-auto px-4 flex justify-between items-center">
-                {Astro.url.pathname !== '/' && (
-                    <a href="/" class="text-3xl font-logo tracking-tight">Buvette</a>
-                )}
-                <nav class={Astro.url.pathname === '/' ? 'ml-auto' : ''}>
-                    <ul class="flex justify-center space-x-6 text-sm font-bold uppercase">
-                        <li><a href="/" class="hover:bg-black hover:text-white px-1 transition-colors">Home</a></li>
-                        <li><a href="/about" class="hover:bg-black hover:text-white px-1 transition-colors">About</a></li>
-                    </ul>
-                </nav>
-            </div>
-		</header>
 
         <main class={`flex-grow ${useDefaultContainer ? 'container mx-auto px-4 py-8' : ''}`}>
             <slot />
