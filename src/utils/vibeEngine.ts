@@ -27,6 +27,7 @@ export interface WinnipegContext {
         holiday: {
             isHoliday: boolean;
             holidayName: string | null;
+            recommendedTheme: ThemeKey | null;
         };
     };
     social: {
@@ -37,6 +38,10 @@ export interface WinnipegContext {
     grind: {
         isGrind: boolean;
         coldStreakDays: number;
+        todayMinTemp: number;
+        tomorrowMinTemp: number;
+        dayAfterMinTemp: number;
+        isColdSnapWarning: boolean;
     };
     metrics: {
         deltaShock: number;
@@ -132,7 +137,7 @@ async function getJetsContext(): Promise<JetsStatus> {
     }
 }
 
-function deriveTheme(ctx: WinnipegContext): Theme {
+function deriveTheme(ctx: WinnipegContext, date: Date): Theme {
     // --- PRIORITY 1: DANGER ---
     if (ctx.weather.wmoCode >= 95) return THEMES.BUNKER; // Severe Thunderstorm
     if (ctx.weather.isSmoke) return THEMES.SMOKE;
@@ -151,20 +156,13 @@ function deriveTheme(ctx: WinnipegContext): Theme {
 
     // --- PRIORITY 4: HOLIDAY THEMES ---
     const holiday = ctx.temporal.holiday;
-    if (holiday.isHoliday && holiday.holidayName) {
-        // Holiday-specific themes
-        if (holiday.holidayName.includes('Christmas') || holiday.holidayName.includes('Boxing')) {
-            return THEMES.COZY_SOMBER;
-        }
+    if (holiday.isHoliday && holiday.holidayName && holiday.recommendedTheme) {
+        // Special time-of-day logic for New Year's Eve/Day
         if (holiday.holidayName.includes('New Year')) {
             return ctx.temporal.hour < 12 ? THEMES.HYGGE_MODE : THEMES.MANIC_PARTY;
         }
-        if (holiday.holidayName.includes('Festival du Voyageur')) {
-            return THEMES.COZY_SOMBER; // Red sash vibes
-        }
-        if (holiday.holidayName.includes('Canada Day')) {
-            return THEMES.PRAIRIE_GOLD;
-        }
+
+        return THEMES[holiday.recommendedTheme];
     }
 
     // --- PRIORITY 5: SPECIFIC PHENOMENA ---
@@ -224,21 +222,20 @@ function deriveTheme(ctx: WinnipegContext): Theme {
     }
 
     // Flood (Rapid melt / Heavy Rain in Spring)
-    if (ctx.temporal.seasonBias === 'optimistic' && (ctx.weather.snowDepth > 20 && ctx.weather.temp > 5) || (ctx.weather.wmoCode >= 50 && ctx.temporal.dayOfYear >= 90 && ctx.temporal.dayOfYear <= 150)) {
+    if (ctx.temporal.seasonBias === 'optimistic' && ((ctx.weather.snowDepth > 20 && ctx.weather.temp > 5) || (ctx.weather.wmoCode >= 50 && ctx.temporal.dayOfYear >= 90 && ctx.temporal.dayOfYear <= 150))) {
         return THEMES.FLOOD; // April/May Wet
     }
 
     // Construction (Summer Weekdays)
-    const d = new Date();
-    const isSummer = d.getMonth() >= 4 && d.getMonth() <= 8; // May-Sep
-    const isWeekday = d.getDay() >= 1 && d.getDay() <= 5;
+    const isSummer = date.getMonth() >= 4 && date.getMonth() <= 8; // May-Sep
+    const isWeekday = date.getDay() >= 1 && date.getDay() <= 5;
     if (isSummer && isWeekday && ctx.weather.wmoCode < 3 && ctx.weather.temp > 10) {
         // 10% chance of construction detour theme on nice days
         if (Math.random() < 0.1) return THEMES.CONSTRUCTION;
     }
 
     // Default Fallbacks by Season
-    if (d.getMonth() === 8 || d.getMonth() === 9) return THEMES.AUTUMN; // Sept/Oct
+    if (date.getMonth() === 8 || date.getMonth() === 9) return THEMES.AUTUMN; // Sept/Oct
 
     // Default cozy
     return THEMES.HYGGE_MODE;
@@ -298,7 +295,7 @@ async function fetchWeather(): Promise<WeatherData> {
     let dailyMins: number[] = [];
 
     try {
-        const url = 'https://api.open-meteo.com/v1/forecast?latitude=49.89&longitude=-97.14&current=temperature_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,snow_depth&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,visibility,wind_speed_10m,wind_gusts_10m,pressure_msl,is_day,soil_temperature_0cm,soil_moisture_0_to_1cm,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,precipitation_sum,precipitation_hours,precipitation_probability_max&past_days=10&forecast_days=2&timezone=America%2FWinnipeg';
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=49.89&longitude=-97.14&current=temperature_2m,apparent_temperature,is_day,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,snow_depth&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,visibility,wind_speed_10m,wind_gusts_10m,pressure_msl,is_day,soil_temperature_0cm,soil_moisture_0_to_1cm,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,precipitation_sum,precipitation_hours,precipitation_probability_max&past_days=10&forecast_days=3&timezone=America%2FWinnipeg';
 
         const res = await fetch(url);
         if (res.ok) {
@@ -314,8 +311,9 @@ async function fetchWeather(): Promise<WeatherData> {
             snowDepth = current.snow_depth ?? 0;
 
             // Extract daily minimums for Grind calculation
-            // with past_days=10, indices 0-9 are past days, 10 is today
-            dailyMins = data.daily?.temperature_2m_min?.slice(0, 10) ?? [];
+            // with past_days=10 and forecast_days=3, indices 0-9 are past days
+            // index 10 is today, 11 is tomorrow, 12 is day after tomorrow
+            dailyMins = data.daily?.temperature_2m_min?.slice(0, 13) ?? [];
 
             // Calculate Delta Shock (Today vs Yesterday same hour)
             const currentHour = new Date().getHours();
@@ -342,7 +340,7 @@ function mapOverrideMode(mode: VibeOverrideMode | undefined): ManualOverride {
 
 // --- Main Engine ---
 
-export async function getWinnipegContext(overrides?: { temp?: number }): Promise<WinnipegContext> {
+export async function getWinnipegContext(overrides?: { temp?: number, holiday?: string }): Promise<WinnipegContext> {
     const now = Date.now();
     // Only use cache if no overrides are active
     if (!overrides && cache && (now - cache.timestamp < CACHE_DURATION)) {
@@ -382,11 +380,23 @@ export async function getWinnipegContext(overrides?: { temp?: number }): Promise
     const deviation = temp - normalTemp;
 
     // Check for "The Grind" (multi-day cold streak)
-    const isGrind = dailyMins.length >= 3 && dailyMins.every(t => t < -20);
-    const coldStreakDays = dailyMins.filter(t => t < -20).length;
+    // We check the 3 most recent past days + today (indices 7, 8, 9, 10)
+    const recentHistory = dailyMins.slice(7, 11);
+    const isGrind = recentHistory.length >= 3 && recentHistory.every(t => t < -20);
+    const coldStreakDays = dailyMins.slice(0, 11).filter(t => t < -20).length;
+
+    // Look-ahead Cold Snap Warning
+    const todayMinTemp = dailyMins[10] ?? temp;
+    const tomorrowMinTemp = dailyMins[11] ?? todayMinTemp;
+    const dayAfterMinTemp = dailyMins[12] ?? todayMinTemp;
+
+    // Warn if either of the next two days drops significantly and is deeply cold
+    const isColdSnapTomorrow = (todayMinTemp - tomorrowMinTemp >= 10) && tomorrowMinTemp <= -15;
+    const isColdSnapDayAfter = (todayMinTemp - dayAfterMinTemp >= 10) && dayAfterMinTemp <= -15;
+    const isColdSnapWarning = isColdSnapTomorrow || isColdSnapDayAfter;
 
     // Holiday context
-    const holiday = getHolidayContext(date);
+    const holiday = getHolidayContext(date, overrides?.holiday);
 
     // Manual override from CSV
     const manualOverride = mapOverrideMode(vibeOverride?.Mode);
@@ -419,7 +429,8 @@ export async function getWinnipegContext(overrides?: { temp?: number }): Promise
             isBlackoutDate: holiday.isBlackout,
             holiday: {
                 isHoliday: holiday.isHoliday,
-                holidayName: holiday.holidayName
+                holidayName: holiday.holidayName,
+                recommendedTheme: holiday.recommendedTheme
             }
         },
         social: {
@@ -429,7 +440,11 @@ export async function getWinnipegContext(overrides?: { temp?: number }): Promise
         },
         grind: {
             isGrind,
-            coldStreakDays
+            coldStreakDays,
+            todayMinTemp,
+            tomorrowMinTemp,
+            dayAfterMinTemp,
+            isColdSnapWarning
         },
         metrics: {
             deltaShock,
@@ -439,7 +454,7 @@ export async function getWinnipegContext(overrides?: { temp?: number }): Promise
         theme: THEMES.NORMAL // Placeholder, will be overwritten
     };
 
-    ctx.theme = deriveTheme(ctx);
+    ctx.theme = deriveTheme(ctx, date);
 
     cache = { data: ctx, timestamp: Date.now() };
     return ctx;

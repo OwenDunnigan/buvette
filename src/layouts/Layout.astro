@@ -19,7 +19,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 ---
 
 <!doctype html>
-<html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: ${theme.colors.accent}; --contrast-level: ${theme.effects.contrast / 100}; --blur-amount: ${theme.effects.blur};`}>
+<html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: var(--theme-accent); --contrast-level: ${theme.effects.contrast / 100}; --blur-amount: ${theme.effects.blur};`}>
 	<head>
 		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<Analytics />
@@ -28,21 +28,24 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-        <meta name="theme-color" content={theme.colors.accent} />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content={theme.lightColors.bg} />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content={theme.darkColors.bg} />
 		<title>{title} | Buvette</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&family=Sono:wght,MONO@200..800,0..1&display=swap" rel="stylesheet">
 	</head>
 	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id}`}>
-		{/* Victory Stripe - 4px Jets Blue when they win */}
+		{/* Victory Stripe - Jets Colors (Navy, Red, Silver, White) when they win */}
 		{vibe.social.jetsStatus === 'VICTORY' && (
-			<div class="fixed top-0 left-0 right-0 h-1 bg-[#041E42] z-50" aria-label="Jets Victory Banner"></div>
+			<div class="fixed top-0 left-0 right-0 h-2 z-50 jets-victory-stripe" aria-label="Jets Victory Banner"></div>
 		)}
-		<header class={`py-6 border-b border-stone-200 ${vibe.social.jetsStatus === 'VICTORY' ? 'mt-1' : ''}`}>
+		<header class={`py-6 border-b border-stone-200 dark:border-stone-800 ${vibe.social.jetsStatus === 'VICTORY' ? 'mt-2' : ''}`}>
             <div class="container mx-auto px-4 flex justify-between items-center">
-                <a href="/" class="text-3xl font-logo tracking-tight">Buvette</a>
-                <nav>
+                {Astro.url.pathname !== '/' && (
+                    <a href="/" class="text-3xl font-logo tracking-tight">Buvette</a>
+                )}
+                <nav class={Astro.url.pathname === '/' ? 'ml-auto' : ''}>
                     <ul class="flex justify-center space-x-6 text-sm font-bold uppercase">
                         <li><a href="/" class="hover:bg-black hover:text-white px-1 transition-colors">Home</a></li>
                         <li><a href="/about" class="hover:bg-black hover:text-white px-1 transition-colors">About</a></li>
@@ -55,65 +58,91 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
             <slot />
         </main>
 
-        <footer class="p-6 border-t-2 border-dashed border-stone-900 relative">
-            <!-- Location & Hours Section -->
-            <div class="grid grid-cols-2 gap-4 mb-8 text-[10px] uppercase">
-                <div>
-                    <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Location</h3>
-                    <p>42 Grove St</p>
-                    <p>New York, NY 10014</p>
-                    <p class="mt-2 text-[10px] underline cursor-pointer">Get Directions</p>
-                </div>
-                <div>
-                    <h3 class="font-bold mb-1 border-b border-stone-300 inline-block">Hours</h3>
-                    <div class="flex justify-between">
-                        <span>M-F</span>
-                        <span>08:00-00:00</span>
+        <footer class="p-6 border-t-2 border-dashed border-stone-900 dark:border-stone-700 relative">
+            <div class="container mx-auto px-4">
+                <!-- Location & Hours Section -->
+                <div class="grid grid-cols-2 gap-4 mb-8 text-[10px] uppercase">
+                    <div>
+                        <h3 class="font-bold mb-1 border-b border-stone-300 dark:border-stone-700 inline-block">Location</h3>
+                        <p>120 Scott St</p>
+                        <p>Winnipeg, MB R3L 0K9</p>
+                        <a 
+                            href="https://www.google.com/maps/dir/?api=1&destination=120+Scott+St,+Winnipeg,+MB+R3L+0K9" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            class="mt-2 text-[10px] underline cursor-pointer block"
+                        >
+                            Get Directions
+                        </a>
                     </div>
-                    <div class="flex justify-between">
-                        <span>S-S</span>
-                        <span>09:00-00:00</span>
+                    <div class="max-w-[140px] justify-self-end w-full">
+                        <h3 class="font-bold mb-1 border-b border-stone-300 dark:border-stone-700 inline-block">Hours</h3>
+                        <div class="flex justify-between w-full">
+                            <span>M-F</span>
+                            <span>08:00-00:00</span>
+                        </div>
+                        <div class="flex justify-between w-full">
+                            <span>S-S</span>
+                            <span>09:00-00:00</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="text-center">
-                <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
-                <p class="text-xs uppercase mb-2">Please Come Again</p>
-                <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
-            </div>
+                <div class="text-center">
+                    <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
+                    <p class="text-xs uppercase mb-2">Please Come Again</p>
+                    <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
+                </div>
 
-            <div class="mt-6 flex justify-center overflow-hidden">
-                <!-- Barcode simulation -->
-                <div class="h-12 flex items-end gap-[2px]">
-                        {Array.from({ length: 50 }).map(() => (
-                        <div
-                            class="bg-black"
-                            style={{
-                                width: Math.random() > 0.5 ? '2px' : '4px',
-                                height: `${Math.floor(Math.random() * 60) + 40}%`
-                            }}
-                        ></div>
-                        ))}
+                <div class="mt-6 flex justify-center overflow-hidden">
+                    <!-- Barcode simulation -->
+                    <div class="h-12 flex items-end gap-[2px]">
+                            {Array.from({ length: 50 }).map(() => (
+                            <div
+                                class="bg-black dark:bg-stone-300"
+                                style={{
+                                    width: Math.random() > 0.5 ? '2px' : '4px',
+                                    height: `${Math.floor(Math.random() * 60) + 40}%`
+                                }}
+                            ></div>
+                            ))}
+                    </div>
                 </div>
             </div>
 
             <!-- Jagged bottom edge using CSS gradient -->
-            <div class="absolute left-0 right-0 h-4"
-                    style={{
-                    bottom: '-16px',
-                    background: 'linear-gradient(45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #f5f5f4 33.333%, #f5f5f4 66.667%, transparent 66.667%)',
-                    backgroundSize: '20px 40px',
-                    backgroundPosition: '0 -20px'
-                    }}
-            >
-            </div>
+            <div class="absolute left-0 right-0 h-4 footer-jagged-edge" style="bottom: -16px;"></div>
         </footer>
 		<SpeedInsights />
 	</body>
 </html>
 
 <style is:global>
+    /* Jets Victory Strip */
+    .jets-victory-stripe {
+        background: repeating-linear-gradient(
+            45deg,
+            #041E42,
+            #041E42 20px,
+            #C8102E 20px,
+            #C8102E 40px,
+            #ffffff 40px,
+            #ffffff 45px,
+            #7B858D 45px,
+            #7B858D 60px,
+            #ffffff 60px,
+            #ffffff 65px
+        );
+    }
+
+    /* Light & Dark Mode Jagged Edge (Uses Theme Background) */
+    .footer-jagged-edge {
+        background: linear-gradient(45deg, transparent 33.333%, var(--theme-bg) 33.333%, var(--theme-bg) 66.667%, transparent 66.667%), 
+                    linear-gradient(-45deg, transparent 33.333%, var(--theme-bg) 33.333%, var(--theme-bg) 66.667%, transparent 66.667%);
+        background-size: 20px 40px;
+        background-position: 0 -20px;
+        transition: background 0.8s ease;
+    }
     :root {
         --font-display: 'Recursive', sans-serif;
         --font-mono: 'IBM Plex Mono', monospace;
@@ -149,6 +178,22 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
             'CASL' var(--font-casual),  /* Reacts to Temp */
             'slnt' var(--font-slant),   /* Reacts to Wind */
             'wght' var(--font-weight-hero);
+    }
+
+    .hero-text {
+        text-shadow: var(--theme-glow, none);
+        transition: text-shadow 1s ease;
+    }
+
+    @keyframes gradientPulse {
+        0% { background-position: 0% 50%; opacity: 0.8; }
+        50% { background-position: 100% 50%; opacity: 1.0; }
+        100% { background-position: 0% 50%; opacity: 0.8; }
+    }
+
+    .bg-gradient-pulse {
+        background-size: 200% 200% !important;
+        animation: gradientPulse 15s ease infinite;
     }
 
     /* 2. THE BIG DATA (The "gauge") */

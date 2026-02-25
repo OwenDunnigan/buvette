@@ -1,11 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getHeroOverlay, getDynamicMessage } from '../utils/tempColors';
+import { getAllHolidayNames } from '../utils/holidays';
 
+const holidayNames = getAllHolidayNames();
 const { vibe } = Astro.locals;
+const currentHoliday = vibe.temporal.holiday.holidayName;
 
 // Get temperature-based overlay
-const overlay = getHeroOverlay(vibe.metrics.mentalTemp, vibe.social.jetsStatus);
+const overlay = getHeroOverlay(vibe.metrics.mentalTemp, vibe.social.jetsStatus, vibe.temporal.seasonBias, vibe.theme);
 
 // Get dynamic message
 const welcomeMessage = getDynamicMessage({
@@ -14,7 +17,12 @@ const welcomeMessage = getDynamicMessage({
   jetsStatus: vibe.social.jetsStatus,
   isGrind: vibe.grind.isGrind,
   grindDays: vibe.grind.coldStreakDays,
+  todayMinTemp: vibe.grind.todayMinTemp,
+  tomorrowMinTemp: vibe.grind.tomorrowMinTemp,
+  dayAfterMinTemp: vibe.grind.dayAfterMinTemp,
+  isColdSnapWarning: vibe.grind.isColdSnapWarning,
   holiday: vibe.temporal.holiday.holidayName,
+  isBlackout: vibe.temporal.isBlackoutDate,
   deviation: vibe.metrics.deviation,
   deltaShock: vibe.metrics.deltaShock
 });
@@ -25,7 +33,7 @@ const welcomeMessage = getDynamicMessage({
   <div class="flex flex-col md:flex-row min-h-screen">
 
       <!-- LEFT COLUMN: Hero Video (Sticky on Desktop) -->
-      <div class="w-full md:w-1/2 h-[60vh] md:h-screen md:sticky md:top-0 relative overflow-hidden border-b md:border-b-0 md:border-r border-stone-200" style={`background-color: ${vibe.theme.colors.bg}`}>
+      <div class="w-full md:w-1/2 h-[60vh] md:h-screen md:sticky md:top-0 relative overflow-hidden border-b md:border-b-0 md:border-r border-stone-200" style="background-color: var(--theme-bg);">
 
           <!-- Video Container with Parallax Hook -->
           <div class="parallax-video-container absolute inset-0 w-full h-full z-0">
@@ -45,13 +53,13 @@ const welcomeMessage = getDynamicMessage({
           <!-- -50°C = pink/purple, 0°C = blue, 30°C = red, 45°C = black -->
           <!-- Jets win = red + blue gradient -->
           <div 
-            class="absolute inset-0 z-5 transition-all duration-1000"
+            class="absolute inset-0 z-5 transition-all duration-1000 bg-gradient-pulse"
             style={`background: ${overlay.background}; mix-blend-mode: ${overlay.mixBlend};`}
             aria-hidden="true"
           ></div>
 
           <!-- Hero Content Overlay -->
-          <div class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-8 pointer-events-none" style={`color: ${vibe.theme.colors.text}`}>
+          <div class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-8 pointer-events-none" style="color: var(--theme-text);">
                <h1 class="hero-text text-[71px] md:text-8xl font-logo mb-4 drop-shadow-lg">Buvette</h1>
                <p class="text-xl md:text-2xl font-light tracking-wide drop-shadow-md max-w-md mb-6">
                  {welcomeMessage}
@@ -63,7 +71,7 @@ const welcomeMessage = getDynamicMessage({
       </div>
 
       <!-- RIGHT COLUMN: Scrollable Content -->
-      <div class="w-full md:w-1/2 transition-colors duration-1000" style={`background-color: ${vibe.theme.colors.bg}; color: ${vibe.theme.colors.text}`}>
+      <div class="w-full md:w-1/2 transition-colors duration-1000" style="background-color: var(--theme-bg); color: var(--theme-text);">
            <!-- Content Container -->
            <div class="p-8 md:p-16 md:py-32 flex flex-col justify-center min-h-[50vh] space-y-16">
 
@@ -77,9 +85,9 @@ const welcomeMessage = getDynamicMessage({
                        Our menu reflects the changing seasons and the best ingredients we can find.
                    </p>
                    <div>
-                       <a href="/about" 
+                        <a href="/about" 
                           class="inline-block px-10 py-4 text-sm font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300"
-                          style={`background-color: ${vibe.theme.colors.accent}; color: #FFFFFF`}
+                          style="background-color: var(--theme-accent); color: var(--theme-bg);"
                        >
                           About Us
                        </a>
@@ -89,14 +97,14 @@ const welcomeMessage = getDynamicMessage({
                <!-- Hours & Location Grid -->
                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                   <div class="p-8 shadow-sm border border-opacity-20 transition-colors duration-1000" 
-                       style={`background-color: ${vibe.theme.colors.surface}; border-color: ${vibe.theme.colors.text}`}>
+                       style="background-color: var(--theme-surface); border-color: var(--theme-text);">
                       <h2 class="font-display text-2xl mb-4">Hours</h2>
                       <p class="mb-1"><strong>Mon - Fri:</strong> 8am - 12am</p>
                       <p class="mb-1"><strong>Sat - Sun:</strong> 9am - 12am</p>
                       <p class="mt-4 italic text-xs opacity-70">Walk-ins always welcome.</p>
                   </div>
                   <div class="p-8 shadow-sm border border-opacity-20 transition-colors duration-1000"
-                       style={`background-color: ${vibe.theme.colors.surface}; border-color: ${vibe.theme.colors.text}`}>
+                       style="background-color: var(--theme-surface); border-color: var(--theme-text);">
                       <h2 class="font-display text-2xl mb-4">Location</h2>
                       <p class="mb-1">The Forks Market</p>
                       <p class="mb-1">Winnipeg, MB</p>
@@ -105,11 +113,11 @@ const welcomeMessage = getDynamicMessage({
                </div>
 
                <!-- Vibe Engine Debug (Enhanced) -->
-               <div class="weather-display bg-stone-200 p-6 font-mono text-xs border border-stone-300 opacity-70 hover:opacity-100 transition-opacity">
+               <div class="weather-display bg-stone-200 dark:bg-black/40 p-6 font-mono text-xs border border-stone-300 dark:border-stone-700 opacity-70 hover:opacity-100 transition-opacity">
                   <h3 class="font-display text-lg mb-4">Vibe Engine Debug</h3>
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <p class="font-bold text-stone-500 mb-1 text-[9px] uppercase">Weather</p>
+                        <p class="font-bold text-stone-500 dark:text-stone-400 mb-1 text-[9px] uppercase">Weather</p>
                         <p><strong>Temp:</strong> <span class="temp-number">{vibe.weather.temp}°C</span>
                           <span class="text-[9px] opacity-70">
                             (Mental: {vibe.metrics.mentalTemp.toFixed(0)}°C)
@@ -121,15 +129,17 @@ const welcomeMessage = getDynamicMessage({
                         <p><strong>Snow:</strong> {vibe.weather.snowDepth} cm</p>
                     </div>
                     <div>
-                        <p class="font-bold text-stone-500 mb-1 text-[9px] uppercase">Context</p>
+                        <p class="font-bold text-stone-500 dark:text-stone-400 mb-1 text-[9px] uppercase">Context</p>
                         <p><strong>Theme:</strong> {vibe.theme.label}</p>
                         <p><strong>Season:</strong> {vibe.temporal.seasonBias}</p>
                         <p><strong>Deviation:</strong> {vibe.metrics.deviation > 0 ? '+' : ''}{vibe.metrics.deviation.toFixed(1)}°</p>
                         <p><strong>Delta (Δ):</strong> {vibe.metrics.deltaShock > 0 ? '+' : ''}{vibe.metrics.deltaShock.toFixed(1)}°</p>
                         {vibe.grind.isGrind && <p class="text-red-700"><strong>Grind:</strong> Day {vibe.grind.coldStreakDays + 1}</p>}
+                        {vibe.grind.isColdSnapWarning && <p class="text-blue-600"><strong>Warning:</strong> Cold Snap Incoming</p>}
+                        <p class="text-[9px] opacity-70"><strong>Mins:</strong> Today {vibe.grind.todayMinTemp.toFixed(0)}° | Tmrw {vibe.grind.tomorrowMinTemp.toFixed(0)}° | DayAfter {vibe.grind.dayAfterMinTemp.toFixed(0)}°</p>
                     </div>
                     <div>
-                        <p class="font-bold text-stone-500 mb-1 text-[9px] uppercase">Social</p>
+                        <p class="font-bold text-stone-500 dark:text-stone-400 mb-1 text-[9px] uppercase">Social</p>
                         <p><strong>Jets:</strong> {vibe.social.jetsStatus}</p>
                         {vibe.social.manualOverride !== 'NONE' && <p><strong>Override:</strong> {vibe.social.manualOverride}</p>}
                         {vibe.social.overrideMessage && <p class="italic text-[9px]">"{vibe.social.overrideMessage}"</p>}
@@ -137,7 +147,7 @@ const welcomeMessage = getDynamicMessage({
                   </div>
                   
                   <!-- Temp Override Slider -->
-                  <div class="mt-4 pt-4 border-t border-stone-300">
+                  <div class="mt-4 pt-4 border-t border-stone-300 dark:border-stone-700">
                       <label for="temp-slider" class="block font-bold mb-2">Simulate Temp: <span id="temp-display">{vibe.weather.temp}°C</span></label>
                       <input 
                         type="range" 
@@ -145,18 +155,32 @@ const welcomeMessage = getDynamicMessage({
                         min="-50" 
                         max="45" 
                         value={vibe.weather.temp}
-                        class="w-full h-2 bg-stone-300 rounded-lg appearance-none cursor-pointer accent-stone-800"
+                        class="w-full h-2 bg-stone-300 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-stone-800 dark:accent-stone-300"
                       />
-                      <div class="flex justify-between text-[10px] text-stone-500 mt-1">
+                      <div class="flex justify-between text-[10px] text-stone-500 dark:text-stone-400 mt-1">
                           <span>-50°C</span>
                           <span>0°C</span>
                           <span>+45°C</span>
                       </div>
                   </div>
 
+                  <!-- Holiday Override Dropdown -->
+                  <div class="mt-4 pt-4 border-t border-stone-300 dark:border-stone-700">
+                      <label for="holiday-selector" class="block font-bold mb-2">Simulate Holiday:</label>
+                      <select 
+                        id="holiday-selector" 
+                        class="w-full p-2 bg-stone-300 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer border-none text-stone-900 dark:text-stone-100"
+                      >
+                        <option value="">-- No Holiday --</option>
+                        {holidayNames.map(name => (
+                          <option value={name} selected={currentHoliday === name}>{name}</option>
+                        ))}
+                      </select>
+                  </div>
+
                   <details class="mt-4">
                     <summary class="cursor-pointer font-bold">Raw Context</summary>
-                    <pre class="mt-2 text-[10px] overflow-x-auto p-2 bg-stone-100">{JSON.stringify(vibe, null, 2)}</pre>
+                    <pre class="mt-2 text-[10px] overflow-x-auto p-2 bg-stone-100 dark:bg-black/60 dark:text-stone-300">{JSON.stringify(vibe, null, 2)}</pre>
                   </details>
                </div>
 
@@ -227,6 +251,19 @@ const welcomeMessage = getDynamicMessage({
                       const val = e.target.value;
                       const url = new URL(window.location);
                       url.searchParams.set('mockTemp', val);
+                      window.location.href = url.toString();
+                  });
+
+                  // Server Reload on Selection (Holiday)
+                  const holidaySelector = document.getElementById('holiday-selector');
+                  holidaySelector?.addEventListener('change', (e) => {
+                      const val = e.target.value;
+                      const url = new URL(window.location);
+                      if (val) {
+                          url.searchParams.set('holiday', val);
+                      } else {
+                          url.searchParams.delete('holiday');
+                      }
                       window.location.href = url.toString();
                   });
                </script>

@@ -7,7 +7,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const mockTempStr = context.url.searchParams.get('mockTemp');
     const mockTemp = mockTempStr ? parseFloat(mockTempStr) : undefined;
 
-    const vibe = await getWinnipegContext({ temp: mockTemp });
+    const holidayOverride = context.url.searchParams.get('holiday') || undefined;
+    const vibe = await getWinnipegContext({ temp: mockTemp, holiday: holidayOverride });
 
     const themeOverride = context.url.searchParams.get('theme');
     if (themeOverride && themeOverride in THEMES) {

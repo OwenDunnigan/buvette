@@ -23,10 +23,11 @@ const noiseSvg = `data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://
 
 const cssVariables = `
   :root {
-    --theme-bg: ${config.colors.bg};
-    --theme-text: ${config.colors.text};
-    --theme-accent: ${config.colors.accent};
-    --theme-surface: ${config.colors.surface};
+    color-scheme: light dark;
+    --theme-bg: ${config.lightColors.bg};
+    --theme-text: ${config.lightColors.text};
+    --theme-accent: ${config.lightColors.accent};
+    --theme-surface: ${config.lightColors.surface};
 
     --phys-viscosity: ${config.physics.viscosity}s;
     --phys-cursor: ${config.physics.cursor};
@@ -41,6 +42,19 @@ const cssVariables = `
     --fx-saturate: ${config.effects.saturate}%;
 
     --noise-url: url("${noiseSvg}");
+    
+    --theme-glow: ${config.effects.glow ? '0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(200,240,255,0.2)' : 'none'};
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --theme-bg: ${config.darkColors.bg};
+      --theme-text: ${config.darkColors.text};
+      --theme-accent: ${config.darkColors.accent};
+      --theme-surface: ${config.darkColors.surface};
+      
+      --theme-glow: ${config.effects.glow ? '0 0 15px rgba(200,240,255,0.6), 0 0 30px rgba(100,200,255,0.4), 0 0 45px rgba(50,150,255,0.2)' : 'none'};
+    }
   }
 
   /* 1. Global Color Transition */
@@ -145,4 +159,4 @@ const cssVariables = `
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&display=swap" rel="stylesheet">
 
-<style is:global set:html={cssVariables} />
+<style is:inline set:html={cssVariables} />

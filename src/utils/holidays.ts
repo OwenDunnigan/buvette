@@ -21,17 +21,98 @@ const FIXED_HOLIDAYS: Record<string, HolidayDef> = {
     '09-30': { name: 'Truth & Reconciliation Day', theme: 'NEUTRAL_RESPECTFUL', isBlackout: true },
 
     // Festive dates
-    '12-24': { name: 'Christmas Eve', theme: 'COZY_SOMBER' },
-    '12-25': { name: 'Christmas Day', theme: 'COZY_SOMBER' },
-    '12-26': { name: 'Boxing Day', theme: 'COZY_SOMBER' },
+    '12-24': { name: 'Christmas Eve', theme: 'CHRISTMAS' },
+    '12-25': { name: 'Christmas Day', theme: 'CHRISTMAS' },
+    '12-26': { name: 'Boxing Day', theme: 'CHRISTMAS' },
     '12-31': { name: "New Year's Eve", theme: 'MANIC_PARTY' },
     '01-01': { name: "New Year's Day", theme: 'HYGGE_MODE' },
-    '02-14': { name: "Valentine's Day", theme: null }, // Let weather decide, but mark as holiday
+    '02-14': { name: "Valentine's Day", theme: 'VALENTINES' },
     '10-31': { name: "Halloween", theme: 'HALLOWEEN' },
-    '07-01': { name: 'Canada Day', theme: 'PRAIRIE_GOLD' },
+    '07-01': { name: 'Canada Day', theme: 'CANADA_DAY' },
 
     // Winnipeg-specific events (approximate)
     '02-15': { name: 'Louis Riel Day', theme: 'HYGGE_MODE' }, // MB Holiday (3rd Monday Feb, ~Feb 15)
+
+    // Global / Cultural events
+    '06-12': { name: 'Philippine Independence Day', theme: 'MABUHAY' },
+    '04-13': { name: 'Vaisakhi', theme: 'PRAIRIE_GOLD' },
+};
+
+// Movable cultural and religious holidays (2024 - 2035)
+// Dates for Lunar New Year, Diwali, Holi, and Eid al-Fitr
+const MOVABLE_HOLIDAYS: Record<number, Record<string, HolidayDef>> = {
+    2024: {
+        '02-10': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-25': { name: 'Holi', theme: 'HOLI' },
+        '04-10': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-31': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2025: {
+        '01-29': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-14': { name: 'Holi', theme: 'HOLI' },
+        '03-30': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-20': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2026: {
+        '02-17': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-03': { name: 'Holi', theme: 'HOLI' },
+        '03-20': { name: 'Eid al-Fitr', theme: 'EID' },
+        '11-08': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2027: {
+        '02-06': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-22': { name: 'Holi', theme: 'HOLI' },
+        '03-09': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-29': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2028: {
+        '01-26': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-11': { name: 'Holi', theme: 'HOLI' },
+        '02-26': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-17': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2029: {
+        '02-13': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '02-28': { name: 'Holi', theme: 'HOLI' },
+        '02-14': { name: 'Eid al-Fitr', theme: 'EID' },
+        '11-05': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2030: {
+        '02-03': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-19': { name: 'Holi', theme: 'HOLI' },
+        '02-04': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-26': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2031: {
+        '01-23': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-08': { name: 'Holi', theme: 'HOLI' },
+        '01-24': { name: 'Eid al-Fitr', theme: 'EID' },
+        '11-14': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2032: {
+        '02-11': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-26': { name: 'Holi', theme: 'HOLI' },
+        '01-13': { name: 'Eid al-Fitr', theme: 'EID' },
+        '11-02': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2033: {
+        '01-31': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-15': { name: 'Holi', theme: 'HOLI' },
+        '12-21': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-22': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2034: {
+        '02-19': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-04': { name: 'Holi', theme: 'HOLI' },
+        '12-11': { name: 'Eid al-Fitr', theme: 'EID' },
+        '11-10': { name: 'Diwali', theme: 'DIWALI' },
+    },
+    2035: {
+        '02-08': { name: 'Lunar New Year', theme: 'LUNAR_NEW_YEAR' },
+        '03-24': { name: 'Holi', theme: 'HOLI' },
+        '11-30': { name: 'Eid al-Fitr', theme: 'EID' },
+        '10-30': { name: 'Diwali', theme: 'DIWALI' },
+    }
 };
 
 // Range-based holidays (week-long events)
@@ -91,7 +172,47 @@ function getThanksgivingDate(year: number): Date {
     return new Date(year, 9, thanksgivingDay);
 }
 
-export function getHolidayContext(date: Date = new Date()): HolidayContext {
+export function getAllHolidayNames(): string[] {
+    const names = new Set<string>();
+
+    // Fixed holidays
+    Object.values(FIXED_HOLIDAYS).forEach(h => names.add(h.name));
+
+    // Movable holidays
+    Object.values(MOVABLE_HOLIDAYS).forEach(yearHolidays => {
+        Object.values(yearHolidays).forEach(h => names.add(h.name));
+    });
+
+    // Range holidays
+    HOLIDAY_RANGES.forEach(r => names.add(r.name));
+
+    // Dynamic holidays
+    names.add('Thanksgiving');
+
+    return Array.from(names).sort();
+}
+
+export function getHolidayContext(date: Date = new Date(), mockName?: string): HolidayContext {
+    // If mockName is provided, find the holiday by name and return its context
+    if (mockName) {
+        // Check fixed
+        const fixed = Object.values(FIXED_HOLIDAYS).find(h => h.name === mockName);
+        if (fixed) return { isHoliday: true, holidayName: fixed.name, recommendedTheme: fixed.theme, isBlackout: fixed.isBlackout ?? false };
+
+        // Check movable
+        for (const yearHolidays of Object.values(MOVABLE_HOLIDAYS)) {
+            const movable = Object.values(yearHolidays).find(h => h.name === mockName);
+            if (movable) return { isHoliday: true, holidayName: movable.name, recommendedTheme: movable.theme, isBlackout: movable.isBlackout ?? false };
+        }
+
+        // Check ranges
+        const range = HOLIDAY_RANGES.find(r => r.name === mockName);
+        if (range) return { isHoliday: true, holidayName: range.name, recommendedTheme: range.theme, isBlackout: false };
+
+        // Check Thanksgiving
+        if (mockName === 'Thanksgiving') return { isHoliday: true, holidayName: 'Thanksgiving', recommendedTheme: 'AUTUMN', isBlackout: false };
+    }
+
     const dateKey = formatDateKey(date);
 
     // 0. Check Dynamic Holidays (Thanksgiving)
@@ -105,7 +226,7 @@ export function getHolidayContext(date: Date = new Date()): HolidayContext {
         };
     }
 
-    // 1. Check fixed holidays first
+    // 1. Check fixed holidays
     const fixedHoliday = FIXED_HOLIDAYS[dateKey];
     if (fixedHoliday) {
         return {
@@ -114,6 +235,20 @@ export function getHolidayContext(date: Date = new Date()): HolidayContext {
             recommendedTheme: fixedHoliday.theme,
             isBlackout: fixedHoliday.isBlackout ?? false,
         };
+    }
+
+    // 1.5 Check movable holidays
+    const year = date.getFullYear();
+    if (MOVABLE_HOLIDAYS[year]) {
+        const movableHoliday = MOVABLE_HOLIDAYS[year][dateKey];
+        if (movableHoliday) {
+            return {
+                isHoliday: true,
+                holidayName: movableHoliday.name,
+                recommendedTheme: movableHoliday.theme,
+                isBlackout: movableHoliday.isBlackout ?? false,
+            };
+        }
     }
 
     // 2. Check range-based holidays
