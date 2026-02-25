@@ -456,6 +456,8 @@ export async function getWinnipegContext(overrides?: { temp?: number, holiday?: 
 
     ctx.theme = deriveTheme(ctx, date);
 
-    cache = { data: ctx, timestamp: Date.now() };
+    if (!overrides) {
+        cache = { data: ctx, timestamp: Date.now() };
+    }
     return ctx;
 }

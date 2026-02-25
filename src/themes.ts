@@ -271,8 +271,8 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'HYGGE_MODE': {
     id: 'HYGGE_MODE',
     label: "Cabin Vibe",
-    lightColors: { bg: '#FAF0E6', text: '#3D2E24', accent: '#A0522D', surface: '#FFFFFF' },
-    darkColors: { bg: '#1D120B', text: '#DECDBF', accent: '#C27048', surface: '#2C1B11' },
+    lightColors: { bg: '#c5e4ed', text: '#1A2521', accent: '#28a3dc', surface: '#FFFFFF' },
+    darkColors: { bg: '#101e37', text: '#F1E4D3', accent: '#225ae6', surface: '#12171E' },
     physics: { viscosity: 1.0, cursor: 'default' },
     typography: { casual: 1.0, slant: 0, weight: 400 },
     effects: { contrast: 95, blur: '0px', noise: 0.02, saturate: 100 }
@@ -291,7 +291,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'HALLOWEEN': {
     id: 'HALLOWEEN',
     label: "Spooky Szn",
-    lightColors: { bg: '#FF6600', text: '#000000', accent: '#8E24AA', surface: '#E65C00' },
+    lightColors: { bg: '#FF6600', text: '#000000', accent: '#4A148C', surface: '#E65C00' },
     darkColors: { bg: '#0A0A0A', text: '#FF9800', accent: '#AB47BC', surface: '#1A1A1A' },
     physics: { viscosity: 1.3, cursor: 'help' },
     typography: { casual: 1.0, slant: -5, weight: 700 },
@@ -302,7 +302,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
     id: 'MABUHAY',
     label: "Mabuhay",
     lightColors: { bg: '#0038A8', text: '#FFFFFF', accent: '#FCE100', surface: '#002570' },
-    darkColors: { bg: '#001A4D', text: '#FCE100', accent: '#CE1126', surface: '#000D26' },
+    darkColors: { bg: '#001A4D', text: '#FCE100', accent: '#FF4D6A', surface: '#000D26' },
     physics: { viscosity: 1.0, cursor: 'default' },
     typography: { casual: 0.8, slant: 0, weight: 600 },
     effects: { contrast: 120, blur: '0px', noise: 0.05, saturate: 140 }
@@ -311,7 +311,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'LUNAR_NEW_YEAR': {
     id: 'LUNAR_NEW_YEAR',
     label: "Lunar Year",
-    lightColors: { bg: '#D32F2F', text: '#FFEB3B', accent: '#FFC107', surface: '#B71C1C' },
+    lightColors: { bg: '#B71C1C', text: '#FFEB3B', accent: '#FFE082', surface: '#880E4F' },
     darkColors: { bg: '#600000', text: '#FFD700', accent: '#FF8F00', surface: '#3E0000' },
     physics: { viscosity: 0.9, cursor: 'default' },
     typography: { casual: 0.7, slant: 0, weight: 700 },
@@ -321,7 +321,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'HOLI': {
     id: 'HOLI',
     label: "Festival of Colors",
-    lightColors: { bg: '#D81B60', text: '#FFFFFF', accent: '#00E5FF', surface: '#AD1457' },
+    lightColors: { bg: '#C2185B', text: '#FFFFFF', accent: '#00E5FF', surface: '#AD1457' },
     darkColors: { bg: '#311B92', text: '#00E5FF', accent: '#FF4081', surface: '#1A0F4D' },
     physics: { viscosity: 0.8, cursor: 'pointer' },
     typography: { casual: 1.0, slant: -5, weight: 600 },
@@ -341,8 +341,8 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'DIWALI': {
     id: 'DIWALI',
     label: "Festival of Lights",
-    lightColors: { bg: '#FF9800', text: '#311B92', accent: '#FFEB3B', surface: '#F57C00' },
-    darkColors: { bg: '#1A0033', text: '#FFCA28', accent: '#FFFF00', surface: '#0A0014' },
+    lightColors: { bg: '#E65100', text: '#FFF8E1', accent: '#FFEB3B', surface: '#BF360C' },
+    darkColors: { bg: '#3E1C00', text: '#FFE0B2', accent: '#FFD54F', surface: '#1A0A00' },
     physics: { viscosity: 1.1, cursor: 'default' },
     typography: { casual: 0.8, slant: 0, weight: 600 },
     effects: { contrast: 120, blur: '0px', noise: 0.05, saturate: 140 }
@@ -351,7 +351,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'VALENTINES': {
     id: 'VALENTINES',
     label: "Valentine's",
-    lightColors: { bg: '#E91E63', text: '#FFFFFF', accent: '#FFCDD2', surface: '#C2185B' },
+    lightColors: { bg: '#C2185B', text: '#FFFFFF', accent: '#FFCDD2', surface: '#A0144F' },
     darkColors: { bg: '#4A0024', text: '#F48FB1', accent: '#FF4081', surface: '#2E0016' },
     physics: { viscosity: 0.9, cursor: 'default' },
     typography: { casual: 0.8, slant: 0, weight: 500 },
@@ -361,7 +361,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'CHRISTMAS': {
     id: 'CHRISTMAS',
     label: "Festive Season",
-    lightColors: { bg: '#1B5E20', text: '#FFFFFF', accent: '#D32F2F', surface: '#144517' },
+    lightColors: { bg: '#1B5E20', text: '#FFFFFF', accent: '#FF8A80', surface: '#144517' },
     darkColors: { bg: '#0B260D', text: '#C8E6C9', accent: '#F44336', surface: '#051206' },
     physics: { viscosity: 1.1, cursor: 'default' },
     typography: { casual: 0.4, slant: 0, weight: 600 },
@@ -371,7 +371,7 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
   'CANADA_DAY': {
     id: 'CANADA_DAY',
     label: "Canada Day",
-    lightColors: { bg: '#C8102E', text: '#FFFFFF', accent: '#FFFFFF', surface: '#9E0C24' },
+    lightColors: { bg: '#C8102E', text: '#FFFFFF', accent: '#FFEBEE', surface: '#9E0C24' },
     darkColors: { bg: '#6B0818', text: '#FFEBEE', accent: '#FF5252', surface: '#38040C' },
     physics: { viscosity: 0.9, cursor: 'default' },
     typography: { casual: 0.5, slant: 0, weight: 700 },
