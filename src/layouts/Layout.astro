@@ -135,9 +135,8 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         --font-mono: 'IBM Plex Mono', monospace;
 
         /* Calculated Font Axes */
-        --font-slant: calc(var(--wind-force) * -12); /* Lean back 12deg max */
+        /* Prefer using --type-slant and --type-weight injected by VibeInjector */
         --font-casual: var(--temp-mood);             /* Stiff or Loose */
-        --font-weight-hero: calc(800 + (var(--wind-force) * 100)); /* Bulk up against wind */
     }
 
     body {
@@ -149,12 +148,22 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         font-variation-settings:
             'MONO' 0,                   /* Proportional (Readable) */
             'CASL' var(--font-casual),  /* Reacts to Temp */
-            'slnt' var(--font-slant),   /* Reacts to Wind */
-            'wght' var(--font-weight-hero);
+            'slnt' var(--type-slant),   /* Reacts to Wind */
+            'wght' var(--type-weight);
     }
 
     .font-mono {
         font-family: var(--font-mono);
+    }
+
+    /* 1. HEADLINES (The "Voice") */
+    @keyframes windSway {
+        0%, 100% {
+            transform: skewX(calc(var(--wind-force-ratio) * 1deg)) translateX(calc(var(--wind-force-ratio) * -1px));
+        }
+        50% {
+            transform: skewX(calc(var(--wind-force-ratio) * -2deg)) translateX(calc(var(--wind-force-ratio) * 1px));
+        }
     }
 
     /* 1. HEADLINES (The "Voice") */
@@ -163,13 +172,24 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         font-variation-settings:
             'MONO' 0,                   /* Proportional (Readable) */
             'CASL' var(--font-casual),  /* Reacts to Temp */
-            'slnt' var(--font-slant),   /* Reacts to Wind */
-            'wght' var(--font-weight-hero);
+            'slnt' var(--type-slant),   /* Reacts to Wind */
+            'wght' var(--type-weight);
+
+        /* The swaying animation is proportional to wind force */
+        display: inline-block; /* Required for transform to work effectively */
+        animation: windSway calc(4s - (var(--wind-force-ratio) * 2s)) ease-in-out infinite alternate;
+        transform-origin: bottom center;
+    }
+
+    /* Override display block if needed by specific elements like standard h2 that shouldn't break layout too much */
+    h1, h2, .text-3xl {
+        display: block; /* Typically block elements, but animation needs origin */
     }
 
     .hero-text {
         text-shadow: var(--theme-glow, 0 2px 4px rgba(0,0,0,0.5));
         transition: text-shadow 1s ease, opacity 1s ease;
+        display: block; /* Kept block for layout */
     }
 
     @keyframes nightSparkle {
@@ -189,7 +209,10 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 
     @media (prefers-color-scheme: dark) {
         .hero-text {
-            animation: nightSparkle 5s ease-in-out infinite alternate;
+            /* Keep both animations */
+            animation:
+                windSway calc(4s - (var(--wind-force-ratio) * 2s)) ease-in-out infinite alternate,
+                nightSparkle 5s ease-in-out infinite alternate;
         }
     }
 
@@ -210,7 +233,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         font-variation-settings:
             'MONO' 1,                   /* Force Monospace for numbers */
             'CASL' 0,                   /* Keep numbers looking technical/stiff */
-            'slnt' var(--font-slant),   /* But let them LEAN in the wind */
+            'slnt' var(--type-slant),   /* But let them LEAN in the wind */
             'wght' 700;
     }
 
@@ -228,7 +251,11 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 
     .font-logo {
         font-family: 'Sono', monospace;
+        /* Note: Sono doesn't have a 'slnt' axis by default on Google Fonts, but user wants it slanted by wind. We can use CSS transform if axis isn't supported, but let's see if we can just apply transform: skewX() */
         font-variation-settings: 'wght' 392, 'MONO' 0.47;
         font-weight: 392;
+        display: inline-block;
+        animation: windSway calc(4s - (var(--wind-force-ratio) * 2s)) ease-in-out infinite alternate;
+        transform-origin: bottom center;
     }
 </style>

@@ -44,12 +44,14 @@ const welcomeMessage = getDynamicMessage({
           <!-- Video Container with Parallax Hook -->
           <div class="parallax-video-container absolute inset-0 w-full h-full overflow-hidden z-0">
                <video
+                  id="hero-video"
                   class="w-full h-full object-cover transition-transform duration-100 ease-linear will-change-transform"
                   autoplay
                   loop
                   muted
                   playsinline
                   poster="https://images.unsplash.com/photo-1556910103-1c02745a30bf?auto=format&fit=crop&w=800&q=80"
+                  data-temp={vibe.weather.temp}
                >
                   <source src="/benny_SD.webm" type="video/mp4" />
                </video>
@@ -324,8 +326,50 @@ const welcomeMessage = getDynamicMessage({
         };
     }
 
+    function setupVideoPlayback() {
+        const video = document.getElementById('hero-video') as HTMLVideoElement;
+        if (!video) return;
+
+        const tempStr = video.getAttribute('data-temp');
+        if (!tempStr) return;
+
+
+        const temp = parseFloat(tempStr);
+        // Map -45 to +40 temperature range to 0.7 to 1.3 playback rate
+        const minTemp = -45;
+        const maxTemp = 40;
+        const minRate = 0.7;
+        const maxRate = 1.3;
+
+        // Clamp temp
+        const clampedTemp = Math.max(minTemp, Math.min(temp, maxTemp));
+
+        // Calculate rate (linear interpolation)
+        const rate = minRate + ((clampedTemp - minTemp) / (maxTemp - minTemp)) * (maxRate - minRate);
+
+        // Wait for video metadata to load if not already
+        if (video.readyState >= 1) {
+            video.playbackRate = rate;
+        } else {
+            video.addEventListener('loadedmetadata', () => {
+                video.playbackRate = rate;
+            });
+        }
+
+        // Also update if video is played later to ensure it doesn't reset
+        video.addEventListener('play', () => {
+            video.playbackRate = rate;
+        });
+    }
+
+    // Initialize immediately if script is executed
+    setupVideoPlayback();
+
     // Astro View Transitions events
-    document.addEventListener('astro:page-load', setupParallax);
+    document.addEventListener('astro:page-load', () => {
+        setupParallax();
+        setupVideoPlayback();
+    });
 
     document.addEventListener('astro:before-swap', () => {
         if (cleanupParallax) cleanupParallax();
