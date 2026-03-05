@@ -21,7 +21,7 @@ export async function getVibeOverride(): Promise<VibeOverrideRow | null> {
     return vibeCache.data;
   }
 
-  const csvUrl = import.meta.env.VIBE_CSV_URL;
+  const csvUrl = import.meta.env?.VIBE_CSV_URL;
   let csvText = '';
 
   if (csvUrl) {
@@ -86,7 +86,7 @@ export async function getMenuData(): Promise<MenuData> {
     return cachedData;
   }
 
-  const csvUrl = import.meta.env.MENU_CSV_URL;
+  const csvUrl = import.meta.env?.MENU_CSV_URL;
   let csvText = '';
 
   if (csvUrl) {

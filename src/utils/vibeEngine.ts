@@ -58,6 +58,16 @@ type ManualOverride = 'NONE' | 'FORCE_SOMBER' | 'FORCE_PARTY' | 'FORCE_COZY' | '
 let cache: { data: WinnipegContext; timestamp: number } | null = null;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
+// Individual fetch caches
+let jetsCache: { data: JetsStatus; timestamp: number } | null = null;
+const JETS_CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+
+let aqiCache: { data: AqiData; timestamp: number } | null = null;
+const AQI_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+
+let weatherCache: { data: WeatherData; timestamp: number } | null = null;
+const WEATHER_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 // --- Winnipeg Normal Curve ---
 // Sinusoidal approximation of daily average highs
 // Coldest: ~Jan 15 (Day 15) -> -13°C
@@ -83,6 +93,11 @@ function calculatePhysics(temp: number, windSpeed: number) {
 }
 
 async function getJetsContext(): Promise<JetsStatus> {
+    const now = Date.now();
+    if (jetsCache && (now - jetsCache.timestamp < JETS_CACHE_DURATION)) {
+        return jetsCache.data;
+    }
+
     try {
         const todayStr = new Date().toISOString().split('T')[0];
 
@@ -98,7 +113,13 @@ async function getJetsContext(): Promise<JetsStatus> {
 
         // 1. Fetch the Scoreboard for TODAY
         const res = await todayPromise;
-        if (!res.ok) return 'NONE';
+        if (!res.ok) {
+            if (jetsCache) {
+                console.warn('Falling back to stale Jets status cache due to error.');
+                return jetsCache.data;
+            }
+            return 'NONE';
+        }
         const data = await res.json();
 
         const todaysGame = data.games.find((g: any) =>
@@ -107,17 +128,25 @@ async function getJetsContext(): Promise<JetsStatus> {
 
         // 2. CHECK: Is it Game Day?
         if (todaysGame) {
+            let status: JetsStatus = 'GAME_DAY';
             if (todaysGame.gameState === 'FINAL') {
                 const isWin = (todaysGame.homeTeam.abbrev === 'WPG' && todaysGame.homeTeam.score > todaysGame.awayTeam.score) ||
                     (todaysGame.awayTeam.abbrev === 'WPG' && todaysGame.awayTeam.score > todaysGame.homeTeam.score);
-                return isWin ? 'VICTORY' : 'DEFEAT';
+                status = isWin ? 'VICTORY' : 'DEFEAT';
             }
-            return 'GAME_DAY';
+            jetsCache = { data: status, timestamp: now };
+            return status;
         }
 
         // 3. CHECK: Did they play yesterday?
         const yRes = await yesterdayPromise;
-        if (!yRes.ok) return 'NONE';
+        if (!yRes.ok) {
+            if (jetsCache) {
+                console.warn('Falling back to stale Jets status cache due to error.');
+                return jetsCache.data;
+            }
+            return 'NONE';
+        }
         const yData = await yRes.json();
 
         const lastGame = yData.games.find((g: any) =>
@@ -127,12 +156,19 @@ async function getJetsContext(): Promise<JetsStatus> {
         if (lastGame && lastGame.gameState === 'FINAL') {
             const isWin = (lastGame.homeTeam.abbrev === 'WPG' && lastGame.homeTeam.score > lastGame.awayTeam.score) ||
                 (lastGame.awayTeam.abbrev === 'WPG' && lastGame.awayTeam.score > lastGame.homeTeam.score);
-            return isWin ? 'VICTORY' : 'DEFEAT';
+            const status: JetsStatus = isWin ? 'VICTORY' : 'DEFEAT';
+            jetsCache = { data: status, timestamp: now };
+            return status;
         }
 
+        jetsCache = { data: 'NONE', timestamp: now };
         return 'NONE';
     } catch (e) {
         console.error('Error fetching Jets status:', e);
+        if (jetsCache) {
+            console.warn('Falling back to stale Jets status cache due to error.');
+            return jetsCache.data;
+        }
         return 'NONE';
     }
 }
@@ -269,20 +305,36 @@ interface AqiData {
 }
 
 async function fetchAqi(): Promise<AqiData> {
+    const now = Date.now();
+    if (aqiCache && (now - aqiCache.timestamp < AQI_CACHE_DURATION)) {
+        return aqiCache.data;
+    }
+
     try {
         const url = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=49.89&longitude=-97.14&current=us_aqi';
         const res = await fetch(url);
         if (res.ok) {
             const data = await res.json();
-            return { usAqi: data.current?.us_aqi ?? 0 };
+            const result = { usAqi: data.current?.us_aqi ?? 0 };
+            aqiCache = { data: result, timestamp: now };
+            return result;
         }
     } catch (e) {
         console.error('Error fetching AQI:', e);
+    }
+    if (aqiCache) {
+        console.warn('Falling back to stale AQI cache due to error.');
+        return aqiCache.data;
     }
     return { usAqi: 0 };
 }
 
 async function fetchWeather(): Promise<WeatherData> {
+    const now = Date.now();
+    if (weatherCache && (now - weatherCache.timestamp < WEATHER_CACHE_DURATION)) {
+        return weatherCache.data;
+    }
+
     // Default Values
     let temp = -5;
     let apparentTemp = -10;
@@ -325,9 +377,18 @@ async function fetchWeather(): Promise<WeatherData> {
             if (typeof yesterdayTemp === 'number') {
                 deltaShock = temp - yesterdayTemp;
             }
+
+            const result = { temp, apparentTemp, windSpeed, wmoCode, cloudCover, isDay, deltaShock, snowDepth, dailyMins };
+            weatherCache = { data: result, timestamp: now };
+            return result;
         }
     } catch (e) {
         console.error('Error fetching weather:', e);
+    }
+
+    if (weatherCache) {
+        console.warn('Falling back to stale weather cache due to error.');
+        return weatherCache.data;
     }
 
     return { temp, apparentTemp, windSpeed, wmoCode, cloudCover, isDay, deltaShock, snowDepth, dailyMins };
