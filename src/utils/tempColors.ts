@@ -232,7 +232,7 @@ export function getDynamicMessage(context: {
     // 0. Protect Blackout Dates (Solemn Days)
     if (isBlackout) {
         if (holiday?.includes('Remembrance Day')) return 'Lest we forget. Take a moment to reflect today.';
-        if (holiday?.includes('Truth & Reconciliation')) return 'Every Child Matters. Take time to listen and reflect today.';
+        if (holiday?.includes('Truth & Reconciliation')) return 'Every Child Matters.';
         return 'Take a moment to reflect today.';
     }
 
@@ -247,8 +247,8 @@ export function getDynamicMessage(context: {
     else if (holiday?.includes('Lunar New Year')) messages.push('Happy Lunar New Year! Prosperity to you.');
     else if (holiday?.includes('Diwali')) messages.push('Happy Diwali! Let your light shine.');
     else if (holiday?.includes('Holi')) messages.push('Happy Holi! Embrace the colors of the season.');
-    else if (holiday?.includes('Eid')) messages.push('Eid Mubarak! Celebrate safely.');
-    else if (holiday?.includes('Philippine Independence')) messages.push('Maligayang Araw ng Kalayaan!');
+    else if (holiday?.includes('Eid')) messages.push('Happy Eid!');
+    else if (holiday?.includes('Philippine Independence')) messages.push('Happy Independence Philippines!');
     else if (holiday?.includes('Vaisakhi')) messages.push('Happy Vaisakhi! Harvest blessings.');
 
     // 2. Special Combinations (e.g. Jets + Weather)
@@ -260,7 +260,7 @@ export function getDynamicMessage(context: {
         weatherIncluded = true;
         sportsIncluded = true;
     } else if (jetsStatus === 'GAME_DAY' && temp < -30) {
-        messages.push(`Game Day. Bundle up, it is brutal out there.`);
+        messages.push(`Game Day! Bundle up, it is brutal out there.`);
         weatherIncluded = true;
         sportsIncluded = true;
     } else if (jetsStatus === 'VICTORY' && deltaShock > 10) {
@@ -271,8 +271,8 @@ export function getDynamicMessage(context: {
 
     // 3. Independent Sports
     if (!sportsIncluded) {
-        if (jetsStatus === 'VICTORY') messages.push('Go Jets Go! Victory tastes sweet.');
-        else if (jetsStatus === 'GAME_DAY') messages.push('Game Day. Puck drop tonight.');
+        if (jetsStatus === 'VICTORY') messages.push('Go Jets Go!');
+        else if (jetsStatus === 'GAME_DAY') messages.push('Game Day! Brunch is good luck.');
     }
 
     // 4. Independent Weather
@@ -280,16 +280,16 @@ export function getDynamicMessage(context: {
         if (isGrind) messages.push(`Day ${grindDays + 1} of this cold. We have soup.`);
         else if (isColdSnapWarning) {
             const targetTemp = Math.min(tomorrowMinTemp, dayAfterMinTemp);
-            if (targetTemp < -25) messages.push(`Serious cold incoming (${targetTemp}°C). Stock up and settle in.`);
-            else messages.push(`The cold moves in soon. Eat somewhere warm tonight.`);
-        } else if (temp < -35) messages.push('Do not go outside. Seriously.');
+            if (targetTemp < -25) messages.push(`Serious cold incoming (${targetTemp}°C). Come fill your belly and settle in.`);
+            else messages.push(`The cold moves in soon. Eat somewhere warm today.`);
+        } else if (temp < -35) messages.push('Do not go outside. Seriously. After you warm up with us....');
         else if (temp < -25) messages.push('The cold demands respect.');
         else if (temp > 35) messages.push('AC is blasting. Come cool off.');
-        else if (temp > 30) messages.push(`It's hot. Stay hydrated.`);
-        else if (deltaShock > 15) messages.push(`It's warming up. Finally.`);
+        else if (temp > 30) messages.push(`It's hot! Stay hydrated.`);
+        else if (deltaShock > 15) messages.push(`It's warming up! Come warm yourself with a hot meal.`);
         else if (deltaShock < -15) messages.push('Winter came back. Sorry.');
-        else if (deviation > 10) messages.push('Warmer than it should be.');
-        else if (deviation < -10) messages.push('Colder than usual for this time of year.');
+        else if (deviation > 10) messages.push('Warmer than it should be... Iced coffee maybe?');
+        else if (deviation < -10) messages.push('Colder than usual for this time of year. Maybe hot cocoa?');
     }
 
     // 5. Default Fallbacks
