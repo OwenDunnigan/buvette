@@ -280,7 +280,7 @@ export function getDynamicMessage(context: {
     // B. Independent Sports
     if (!sportsHandled && !contextMsg) {
         if (jetsStatus === 'VICTORY') contextMsg = "Celebrating the Jets victory today!";
-        else if (jetsStatus === 'GAME_DAY') contextMsg = "It's Game Day! Our brunch is good luck ;)";
+        else if (jetsStatus === 'GAME_DAY') contextMsg = "It's Game Day! \n Our brunch is good luck ;)";
     }
 
     // C. Independent Weather
