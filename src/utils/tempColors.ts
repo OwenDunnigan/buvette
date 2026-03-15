@@ -210,7 +210,7 @@ export function getHeroOverlay(
 }
 
 /**
- * Gets a dynamic message based on context
+ * Gets a dynamic, professionally polished message based on context.
  */
 export function getDynamicMessage(context: {
     temp: number;
@@ -227,79 +227,100 @@ export function getDynamicMessage(context: {
     deviation: number;
     deltaShock: number;
 }): string {
-    const { temp, mentalTemp, jetsStatus, isGrind, grindDays, todayMinTemp, tomorrowMinTemp, dayAfterMinTemp, isColdSnapWarning, holiday, isBlackout, deviation, deltaShock } = context;
+    const { 
+        temp, mentalTemp, jetsStatus, isGrind, grindDays, 
+        tomorrowMinTemp, dayAfterMinTemp, isColdSnapWarning, 
+        holiday, isBlackout, deviation, deltaShock 
+    } = context;
 
-    // 0. Protect Blackout Dates (Solemn Days)
+    // 1. Protect Blackout Dates (Solemn Days)
     if (isBlackout) {
         if (holiday?.includes('Remembrance Day')) return 'Lest we forget. Take a moment to reflect today.';
-        if (holiday?.includes('Truth & Reconciliation')) return 'Every Child Matters.';
-        return 'Take a moment to reflect today.';
+        if (holiday?.includes('Truth & Reconciliation')) return 'Every Child Matters. Take a moment to reflect today.';
+        return 'Please take a moment to reflect today.';
     }
 
-    const messages: string[] = [];
+    const messageParts: string[] = [];
 
-    // 1. Holiday messages
-    if (holiday?.includes('Christmas')) messages.push('Tis the season. Stay warm inside.');
-    else if (holiday?.includes('New Year')) messages.push('Fresh start. Hot coffee.');
-    else if (holiday?.includes('Festival du Voyageur')) messages.push('Célébrons ensemble.');
-    else if (holiday?.includes('Halloween')) messages.push('Spooky vibes only 👻');
-    else if (holiday?.includes('Thanksgiving')) messages.push('Gobble gobble. Grateful for you.');
-    else if (holiday?.includes('Lunar New Year')) messages.push('Happy Lunar New Year! Prosperity to you.');
-    else if (holiday?.includes('Diwali')) messages.push('Happy Diwali! Let your light shine.');
-    else if (holiday?.includes('Holi')) messages.push('Happy Holi! Embrace the colors of the season.');
-    else if (holiday?.includes('Eid')) messages.push('Happy Eid!');
-    else if (holiday?.includes('Philippine Independence')) messages.push('Happy Independence Philippines!');
-    else if (holiday?.includes('Vaisakhi')) messages.push('Happy Vaisakhi! Harvest blessings.');
+    // 2. Holiday Messages (Primary Greeting)
+    if (holiday) {
+        if (holiday.includes('Christmas')) messageParts.push("Season's greetings. Stay warm and enjoy the holidays with us.");
+        else if (holiday.includes('New Year')) messageParts.push("Wishing you a happy New Year and a fresh start!");
+        else if (holiday.includes('Festival du Voyageur')) messageParts.push("Heho! Happy Festival du Voyageur!");
+        else if (holiday.includes('Halloween')) messageParts.push("Happy Halloween!! Join us for some spooky treats.");
+        else if (holiday.includes('Thanksgiving')) messageParts.push("Happy Thanksgiving. We are thankful for you.");
+        else if (holiday.includes('Lunar New Year')) messageParts.push("Happy Lunar New Year! Wishing you joy and prosperity.");
+        else if (holiday.includes('Diwali')) messageParts.push("Wishing you a bright and joyous Diwali.");
+        else if (holiday.includes('Holi')) messageParts.push("Happy Holi. Wishing you a vibrant and colorful season.");
+        else if (holiday.includes('Eid')) messageParts.push("Eid Mubarak! Wishing you peace and joy.");
+        else if (holiday.includes('Philippine Independence')) messageParts.push("Happy Philippine Independence Day.");
+        else if (holiday.includes('Vaisakhi')) messageParts.push("Happy Vaisakhi! Wishing you a season of abundance.");
+    }
 
-    // 2. Special Combinations (e.g. Jets + Weather)
-    let weatherIncluded = false;
-    let sportsIncluded = false;
+    // 3. Weather & Sports Context (Secondary Message)
+    let contextMsg = '';
+    let weatherHandled = false;
+    let sportsHandled = false;
 
+    // A. Special Combinations (Naturally joined with "and" where appropriate)
     if (jetsStatus === 'VICTORY' && temp < -25) {
-        messages.push(`Jets won! At least that helps the ${mentalTemp.toFixed(0)}°C chill.`);
-        weatherIncluded = true;
-        sportsIncluded = true;
+        contextMsg = `A great Jets victory to help brave the ${mentalTemp.toFixed(0)}°C chill.`;
+        weatherHandled = true;
+        sportsHandled = true;
     } else if (jetsStatus === 'GAME_DAY' && temp < -30) {
-        messages.push(`Game Day! Bundle up, it is brutal out there.`);
-        weatherIncluded = true;
-        sportsIncluded = true;
+        contextMsg = "It's Game Day, and it is bitterly cold outside. Please bundle up, and join us for a good luck meal.";
+        weatherHandled = true;
+        sportsHandled = true;
     } else if (jetsStatus === 'VICTORY' && deltaShock > 10) {
-        messages.push(`Jets win AND it is warming up. A beautiful day.`);
-        weatherIncluded = true;
-        sportsIncluded = true;
+        contextMsg = "A Jets victory and warming temperatures make for a beautiful day.";
+        weatherHandled = true;
+        sportsHandled = true;
     }
 
-    // 3. Independent Sports
-    if (!sportsIncluded) {
-        if (jetsStatus === 'VICTORY') messages.push('Go Jets Go!');
-        else if (jetsStatus === 'GAME_DAY') messages.push('Game Day! Brunch is good luck.');
+    // B. Independent Sports
+    if (!sportsHandled && !contextMsg) {
+        if (jetsStatus === 'VICTORY') contextMsg = "Celebrating the Jets victory today!";
+        else if (jetsStatus === 'GAME_DAY') contextMsg = "It's Game Day! Our brunch is good luck ;)";
     }
 
-    // 4. Independent Weather
-    if (!weatherIncluded) {
-        if (isGrind) messages.push(`Day ${grindDays + 1} of this cold. We have soup.`);
+    // C. Independent Weather
+    if (!weatherHandled) {
+        let weatherSubMsg = '';
+        
+        if (isGrind) weatherSubMsg = `Day ${grindDays + 1} of the deep freeze. Warm up with our daily soup!`;
         else if (isColdSnapWarning) {
             const targetTemp = Math.min(tomorrowMinTemp, dayAfterMinTemp);
-            if (targetTemp < -25) messages.push(`Serious cold incoming (${targetTemp}°C). Come fill your belly and settle in.`);
-            else messages.push(`The cold moves in soon. Eat somewhere warm today.`);
-        } else if (temp < -35) messages.push('Do not go outside. Seriously. After you warm up with us....');
-        else if (temp < -25) messages.push('The cold demands respect.');
-        else if (temp > 35) messages.push('AC is blasting. Come cool off.');
-        else if (temp > 30) messages.push(`It's hot! Stay hydrated.`);
-        else if (deltaShock > 15) messages.push(`It's warming up! Come warm yourself with a hot meal.`);
-        else if (deltaShock < -15) messages.push('Winter came back. Sorry.');
-        else if (deviation > 10) messages.push('Warmer than it should be... Iced coffee maybe?');
-        else if (deviation < -10) messages.push('Colder than usual for this time of year. Maybe hot cocoa?');
+            if (targetTemp < -25) weatherSubMsg = `A cold snap is approaching (${targetTemp}°C). Stop by and enjoy a warm meal before it sets in.`;
+            else weatherSubMsg = "Colder weather is on the way - our oven is on!";
+        } else if (temp < -35) weatherSubMsg = "Extreme cold warning today. Please stay safe, and join us indoors when you need to warm up.";
+        else if (temp < -25) weatherSubMsg = "Frigid temperatures today. Bundle up and come warm up.";
+        else if (temp > 35) weatherSubMsg = "Escape the heat today. Join us in the air conditioning for a refreshing lemonade.";
+        else if (temp > 30) weatherSubMsg = "It's a hot one today! Stop by for a cold drink.";
+        else if (deltaShock > 15) weatherSubMsg = "The weather is finally warming up. Celebrate with a great meal.";
+        else if (deltaShock < -15) weatherSubMsg = "Winter has returned. Warm up inside with a hot beverage.";
+        else if (deviation > 10) weatherSubMsg = "A bit warm today - perfect for an iced coffee.";
+        else if (deviation < -10) weatherSubMsg = "A bit chilly out today - stop by for hot cocoa!";
+
+        // Intelligently combine sports and weather if both triggered independently
+        if (contextMsg && weatherSubMsg) {
+            // Converts the first letter of weatherSubMsg to lowercase for a smoother grammatical join
+            const lowerWeather = weatherSubMsg.charAt(0).toLowerCase() + weatherSubMsg.slice(1);
+            contextMsg = `${contextMsg} Also, ${lowerWeather}`;
+        } else if (weatherSubMsg) {
+            contextMsg = weatherSubMsg;
+        }
     }
 
-    // 5. Default Fallbacks
-    if (messages.length === 0) {
-        if (temp < -10) return 'The oven is on. Come in.';
-        if (temp < 5) return 'Coffee is hot. You are welcome.';
-        if (temp > 20) return 'Patio season!';
-        return 'Good to see you.';
+    if (contextMsg) messageParts.push(contextMsg);
+
+    // 4. Default Fallbacks (Only triggers if the array is entirely empty)
+    if (messageParts.length === 0) {
+        if (temp < -10) return "It's cold out there. Step inside and warm up.";
+        if (temp < 5) return "Our coffee is fresh and hot. We hope to see you today.";
+        if (temp > 20) return "It's patio weather! Join us outside.";
+        return "We look forward to seeing you today!";
     }
 
-    // Combine and return
-    return messages.join(' ');
+    // 5. Final Assembly (Joins primary greetings and context smoothly)
+    return messageParts.join(' ');
 }

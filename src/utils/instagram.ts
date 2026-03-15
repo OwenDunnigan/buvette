@@ -52,7 +52,7 @@ export async function fetchInstagramFeed(): Promise<InstagramMedia[]> {
 
       // Update cache (taking max 6 items)
       instagramCache = {
-        media: mediaList.slice(0, 6),
+        media: mediaList.slice(0, 15),
         lastFetched: now,
       };
 

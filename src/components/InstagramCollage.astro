@@ -7,26 +7,42 @@ export interface Props {
 
 const { images = [] } = Astro.props;
 
-function getRandomRotation(min: number, max: number) {
-  return Math.random() * (max - min) + min;
-}
+// 11 "Neighborhoods" spread across the blue section
+const neighborhoods = [
+  { x: 5, y: 2 },   { x: 35, y: 8 },   { x: 65, y: 3 },  // Top Row
+  { x: 12, y: 25 },  { x: 42, y: 32 },  { x: 68, y: 22 }, // Mid-Top
+  { x: 4, y: 52 },   { x: 38, y: 58 },  { x: 62, y: 48 }, // Mid-Bottom
+  { x: 15, y: 82 },  { x: 55, y: 85 }                     // Bottom Row
+];
 
-const scatteredImages = images.map((img, index) => ({
-  ...img,
-  // MESSY ROTATION: Random angle between -15 and +15 degrees
-  rotation: getRandomRotation(-15, 15).toFixed(1),
-  // FULL WIDTH SPREAD: Random left position between 5% and 75%
-  desktopLeft: Math.floor(Math.random() * 70) + 5,
-  // VERTICAL SPREAD: Random top position between 5% and 50%
-  desktopTop: Math.floor(Math.random() * 45) + 5,
-  // Base stacking order
-  zIndex: index + 1,
-}));
+const scatteredImages = images.slice(0, 11).map((img, index, arr) => {
+  const home = neighborhoods[index % neighborhoods.length];
+  // Add this inside your .map() function
+  const randomScale = (0.9 + Math.random() * 0.2).toFixed(2); // Scales between 0.9 and 1.1
+  
+  // INCREASED JITTER: This creates the "Overlap"
+  // We allow them to wander up to 15% from their home base
+  const jitterX = Math.floor(Math.random() * 15) - 7.5; 
+  const jitterY = Math.floor(Math.random() * 12) - 6;
+  
+  // RANDOM ROTATION: -12 to +12 degrees
+  const rotation = (Math.random() * 24 - 12).toFixed(1);
+
+  return {
+    ...img,
+    rotation,
+    randomScale,
+    desktopLeft: home.x + jitterX,
+    desktopTop: home.y + jitterY,
+    // Freshest images get a higher z-index
+    zIndex: arr.length - index,
+  };
+});
 ---
 
 <div class="instagram-collage-wrapper w-full relative">
   {scatteredImages.length > 0 ? (
-    <div id="insta-feed-container" class="flex flex-col items-center gap-8 md:block md:gap-0">
+    <div id="insta-feed-container" class="grid grid-cols-2 gap-4 p-4 md:block md:gap-0 md:p-0">
       {scatteredImages.map((image) => (
         <a
           href={image.permalink || "https://www.instagram.com/buvette.inthevillage/"}
@@ -38,22 +54,22 @@ const scatteredImages = images.map((img, index) => ({
             --desktop-top: ${image.desktopTop}%;
             --desktop-rotation: ${image.rotation}deg;
             --base-z-index: ${image.zIndex};
+            --random-scale: ${image.randomScale};
           `}
           aria-label={image.caption ? `View Instagram post: ${image.caption}` : "View Instagram post"}
         >
-          <div class="polaroid-frame w-[280px] md:w-[300px]">
+          <div class="polaroid-frame w-full md:w-[320px]">
             <div class="w-full aspect-square overflow-hidden bg-stone-100 flex items-center justify-center">
               <img
                 src={image.media_type === 'VIDEO' ? (image.thumbnail_url || image.media_url) : image.media_url}
                 alt={image.caption || "Instagram Post"}
                 loading="lazy"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
             </div>
           </div>
         </a>
-      ))
-      }
+      ))}
     </div>
   ) : (
     <div class="text-center w-full min-h-[400px] text-stone-500 italic flex items-center justify-center h-full">
@@ -64,13 +80,10 @@ const scatteredImages = images.map((img, index) => ({
 
 <style>
   .instagram-collage-wrapper {
-    /* Container wrapper */
-    padding: 2rem 1rem;
-    overflow-x: clip; /* allow full width on mobile without breaking x bounds */
+    padding: 2rem 0;
+    overflow-x: clip;
   }
 
-  /* Single column (Mobile) behavior is handled primarily by Tailwind Flex classes in the HTML. */
-  /* Here we just apply the physical paper look */
   .polaroid-frame {
     padding: 12px 12px 45px 12px;
     background: white;
@@ -84,13 +97,11 @@ const scatteredImages = images.map((img, index) => ({
     z-index: var(--base-z-index, 1);
   }
 
-  /* Desktop Styles: The Scattered Collage */
   @media (min-width: 768px) {
     #insta-feed-container {
       position: relative;
       width: 100%;
-      height: 700px;
-      margin-top: 40px;
+      height: 1200px; /* Reduced slightly to keep the photos cohesive */
       overflow: visible;
     }
 
@@ -98,17 +109,15 @@ const scatteredImages = images.map((img, index) => ({
       position: absolute;
       top: var(--desktop-top);
       left: var(--desktop-left);
-      transform: rotate(var(--desktop-rotation));
-      /* The cubic-bezier adds a high-end "spring" effect to the hover */
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.4s;
+      transform: rotate(var(--desktop-rotation)) scale(var(--random-scale));
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s;
       transform-origin: center center;
     }
 
-    /* THE HOVER MAGIC */
     .polaroid-card:hover,
     .polaroid-card:focus {
       transform: scale(1.15) rotate(0deg) !important;
-      z-index: 9999 !important; /* Forces the hovered photo to the very front */
+      z-index: 9999 !important; 
     }
 
     .polaroid-card:hover .polaroid-frame,

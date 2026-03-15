@@ -36,7 +36,7 @@ const welcomeMessage = getDynamicMessage({
 <Layout title="Home" useDefaultContainer={false}>
   <!-- Floating About Link -->
   <a href="/about" 
-     class="floating-about fixed top-6 right-6 z-50 text-lg font-bold uppercase transition-transform hover:scale-105">
+     class="floating-about fixed top-6 right-6 z-1050 text-2xl font-bold uppercase transition-transform hover:scale-105" style="z-index:100;">
     About
   </a>
 
@@ -76,23 +76,23 @@ const welcomeMessage = getDynamicMessage({
             class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-8 pointer-events-none"
             style="color: var(--theme-hero-text);"
           >
-               <h1 class="hero-text text-[71px] md:text-8xl font-logo mb-4 drop-shadow-lg">Buvette</h1>
+               <h1 class="hero-text text-[6em] font-logo mb-4 drop-shadow-lg">Buvette</h1>
                <p class="text-xl md:text-2xl font-light tracking-wide drop-shadow-md max-w-md mb-6">
                  {welcomeMessage}
                </p>
                <p class="text-sm opacity-80 drop-shadow-sm">
-                 {vibe.weather.temp.toFixed(0)}°C (Feels like {vibe.metrics.mentalTemp.toFixed(0)}°C)
-               </p>
+                {vibe.weather.temp.toFixed(0)}&deg;C (Feels like {vibe.metrics.mentalTemp.toFixed(0)}&deg;C)
+              </p>
           </div>
       </div>
 
       <!-- RIGHT COLUMN: Scrollable Content -->
-      <div class="w-full md:w-1/2 transition-colors duration-1000" style="background-color: var(--theme-bg); color: var(--theme-text);">
+      <div class="w-full md:w-1/2 transition-colors duration-1000 overflow-hidden" style="background-color: var(--theme-bg); color: var(--theme-text);">
            <!-- Content Container -->
-           <div class="p-8 md:p-16 md:py-32 flex flex-col justify-center min-h-[120vh] space-y-16">
+           <div class="md:py-32 flex flex-col justify-center min-h-[120vh] space-y-16">
 
                <!-- Introduction -->
-               <div class="text-center md:text-left space-y-8">
+               <div class="text-center md:text-left space-y-8 p-8 md:p-16">
                    <p class="text-2xl md:text-3xl font-light leading-relaxed opacity-90">
                       Dedicated to the joy of <span class="italic font-display">eating</span> and <span class="italic font-display">drinking</span>.
                    </p>
@@ -111,7 +111,7 @@ const welcomeMessage = getDynamicMessage({
                </div>
 
                <!-- Hours & Location Grid -->
-               <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+               <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 p-8 md:p-16">
                   <div class="p-8 shadow-sm border border-opacity-20 transition-colors duration-1000" 
                        style="background-color: var(--theme-surface); border-color: var(--theme-text);">
                       <h2 class="font-display text-2xl mb-4">Hours</h2>
@@ -124,171 +124,15 @@ const welcomeMessage = getDynamicMessage({
                       <h2 class="font-display text-2xl mb-4">Location</h2>
                       <p class="mb-1">120 Scott Street</p>
                       <p class="mb-1">Winnipeg, MB</p>
-                      <p class="mt-4"><a href="#" class="underline hover:opacity-80">Get Directions &rarr;</a></p>
+                      <p class="mt-4"><a href="https://www.google.com/maps/dir/?api=1&destination=120+Scott+St,+Winnipeg,+MB+R3L+0K9" class="underline hover:opacity-80">Get Directions &rarr;</a></p>
                   </div>
                </div>
 
                <!-- Instagram Scattered Collage -->
                <div class="mt-16 mb-8 w-full">
-                  <h2 class="font-display text-2xl text-center md:text-left mb-4 opacity-90">Lately...</h2>
+                  <h2 class="font-display text-2xl text-center md:text-left opacity-90 pl-8 pb-4 md:pl-16">Latest...</h2>
                   <InstagramCollage images={instagramFeed} />
                </div>
-
-               <!-- Vibe Engine Debug (Enhanced) -->
-               <div class="weather-display bg-stone-200 dark:bg-black/40 p-6 font-mono text-xs border border-stone-300 dark:border-stone-700 opacity-70 hover:opacity-100 transition-opacity">
-                  <h3 class="font-display text-lg mb-4">Vibe Engine Debug</h3>
-                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <p class="font-bold text-stone-500 dark:text-stone-400 mb-1 text-[9px] uppercase">Weather</p>
-                        <p><strong>Temp:</strong> <span class="temp-number">{vibe.weather.temp}°C</span>
-                          <span class="text-[9px] opacity-70">
-                            (Mental: {vibe.metrics.mentalTemp.toFixed(0)}°C)
-                          </span>
-                        </p>
-                        <p><strong>Wind:</strong> {(vibe.weather.windForce * 50).toFixed(0)} km/h</p>
-                        <p><strong>Viscosity:</strong> {vibe.weather.viscosity.toFixed(2)}s</p>
-                        <p><strong>AQI:</strong> {vibe.weather.usAqi} {vibe.weather.isSmoke && '🔥'}</p>
-                        <p><strong>Snow:</strong> {vibe.weather.snowDepth} cm</p>
-                    </div>
-                    <div>
-                        <p class="font-bold text-stone-500 dark:text-stone-400 mb-1 text-[9px] uppercase">Context</p>
-                        <p><strong>Theme:</strong> {vibe.theme.label}</p>
-                        <p><strong>Season:</strong> {vibe.temporal.seasonBias}</p>
-                        <p><strong>Deviation:</strong> {vibe.metrics.deviation > 0 ? '+' : ''}{vibe.metrics.deviation.toFixed(1)}°</p>
-                        <p><strong>Delta (Δ):</strong> {vibe.metrics.deltaShock > 0 ? '+' : ''}{vibe.metrics.deltaShock.toFixed(1)}°</p>
-                        {vibe.grind.isGrind && <p class="text-red-700"><strong>Grind:</strong> Day {vibe.grind.coldStreakDays + 1}</p>}
-                        {vibe.grind.isColdSnapWarning && <p class="text-blue-600"><strong>Warning:</strong> Cold Snap Incoming</p>}
-                        <p class="text-[9px] opacity-70"><strong>Mins:</strong> Today {vibe.grind.todayMinTemp.toFixed(0)}° | Tmrw {vibe.grind.tomorrowMinTemp.toFixed(0)}° | DayAfter {vibe.grind.dayAfterMinTemp.toFixed(0)}°</p>
-                    </div>
-                    <div>
-                        <p class="font-bold text-stone-500 dark:text-stone-400 mb-1 text-[9px] uppercase">Social</p>
-                        <p><strong>Jets:</strong> {vibe.social.jetsStatus}</p>
-                        {vibe.social.manualOverride !== 'NONE' && <p><strong>Override:</strong> {vibe.social.manualOverride}</p>}
-                        {vibe.social.overrideMessage && <p class="italic text-[9px]">"{vibe.social.overrideMessage}"</p>}
-                    </div>
-                  </div>
-                  
-                  <!-- Temp Override Slider -->
-                  <div class="mt-4 pt-4 border-t border-stone-300 dark:border-stone-700">
-                      <label for="temp-slider" class="block font-bold mb-2">Simulate Temp: <span id="temp-display">{vibe.weather.temp}°C</span></label>
-                      <input 
-                        type="range" 
-                        id="temp-slider" 
-                        min="-50" 
-                        max="45" 
-                        value={vibe.weather.temp}
-                        class="w-full h-2 bg-stone-300 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-stone-800 dark:accent-stone-300"
-                      />
-                      <div class="flex justify-between text-[10px] text-stone-500 dark:text-stone-400 mt-1">
-                          <span>-50°C</span>
-                          <span>0°C</span>
-                          <span>+45°C</span>
-                      </div>
-                  </div>
-
-                  <!-- Holiday Override Dropdown -->
-                  <div class="mt-4 pt-4 border-t border-stone-300 dark:border-stone-700">
-                      <label for="holiday-selector" class="block font-bold mb-2">Simulate Holiday:</label>
-                      <select 
-                        id="holiday-selector" 
-                        class="w-full p-2 bg-stone-300 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer border-none text-stone-900 dark:text-stone-100"
-                      >
-                        <option value="">-- No Holiday --</option>
-                        {holidayNames.map(name => (
-                          <option value={name} selected={currentHoliday === name}>{name}</option>
-                        ))}
-                      </select>
-                  </div>
-
-                  <details class="mt-4">
-                    <summary class="cursor-pointer font-bold">Raw Context</summary>
-                    <pre class="mt-2 text-[10px] overflow-x-auto p-2 bg-stone-100 dark:bg-black/60 dark:text-stone-300">{JSON.stringify(vibe, null, 2)}</pre>
-                  </details>
-               </div>
-
-               <script define:vars={{ initialTemp: vibe.weather.temp, seasonBias: vibe.temporal.seasonBias }}>
-                  const slider = document.getElementById('temp-slider');
-                  const display = document.getElementById('temp-display');
-                  const overlay = document.querySelector('.z-5'); // The gradient overlay
-
-                  // Client-side Spring/Fall Gradients (Matched to server logic)
-                  const SPRING_GRADIENT = [
-                        { temp: -50, color: '#1a0b2e' }, { temp: -30, color: '#172554' },
-                        { temp: -10, color: '#0EA5E9' }, { temp: 0,   color: '#06B6D4' },
-                        { temp: 10,  color: '#10B981' }, { temp: 20,  color: '#FACC15' },
-                        { temp: 30,  color: '#F97316' }, { temp: 45,  color: '#EF4444' }
-                  ];
-                  const FALL_GRADIENT = [
-                        { temp: -50, color: '#1e1b4b' }, { temp: -30, color: '#1e3a8a' },
-                        { temp: -10, color: '#475569' }, { temp: 0,   color: '#78716C' },
-                        { temp: 10,  color: '#A8A29E' }, { temp: 20,  color: '#D97706' },
-                        { temp: 30,  color: '#9a3412' }, { temp: 45,  color: '#7F1D1D' }
-                  ];
-
-                  function interpolateColor(color1, color2, factor) {
-                      const c1 = parseInt(color1.slice(1), 16);
-                      const c2 = parseInt(color2.slice(1), 16);
-                      
-                      const r1 = (c1 >> 16) & 0xff; const g1 = (c1 >> 8) & 0xff; const b1 = c1 & 0xff;
-                      const r2 = (c2 >> 16) & 0xff; const g2 = (c2 >> 8) & 0xff; const b2 = c2 & 0xff;
-                      
-                      const r = Math.round(r1 + factor * (r2 - r1));
-                      const g = Math.round(g1 + factor * (g2 - g1));
-                      const b = Math.round(b1 + factor * (b2 - b1));
-                      
-                      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-                  }
-
-                  function getColor(temp) {
-                      const gradient = seasonBias === 'optimistic' ? SPRING_GRADIENT : FALL_GRADIENT;
-                      let lower = gradient[0];
-                      let upper = gradient[gradient.length - 1];
-
-                      for (let i = 0; i < gradient.length - 1; i++) {
-                          if (temp >= gradient[i].temp && temp <= gradient[i + 1].temp) {
-                              lower = gradient[i];
-                              upper = gradient[i + 1];
-                              break;
-                          }
-                      }
-                      const range = upper.temp - lower.temp;
-                      const factor = range === 0 ? 0 : (temp - lower.temp) / range;
-                      return interpolateColor(lower.color, upper.color, factor);
-                  }
-
-                  // Instant Feedback
-                  slider?.addEventListener('input', (e) => {
-                      const val = parseFloat(e.target.value);
-                      display.textContent = `${val}°C`;
-                      
-                      // Update Overlay Color Instantly
-                      const color = getColor(val);
-                      if (overlay) {
-                        overlay.style.background = `linear-gradient(135deg, ${color}50, ${color}40)`;
-                      }
-                  });
-
-                  // Server Reload on Release
-                  slider?.addEventListener('change', (e) => {
-                      const val = e.target.value;
-                      const url = new URL(window.location);
-                      url.searchParams.set('mockTemp', val);
-                      window.location.href = url.toString();
-                  });
-
-                  // Server Reload on Selection (Holiday)
-                  const holidaySelector = document.getElementById('holiday-selector');
-                  holidaySelector?.addEventListener('change', (e) => {
-                      const val = e.target.value;
-                      const url = new URL(window.location);
-                      if (val) {
-                          url.searchParams.set('holiday', val);
-                      } else {
-                          url.searchParams.delete('holiday');
-                      }
-                      window.location.href = url.toString();
-                  });
-               </script>
 
            </div>
       </div>
