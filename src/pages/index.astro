@@ -48,7 +48,7 @@ const welcomeMessage = getDynamicMessage({
   <div class="flex flex-col md:flex-row min-h-screen">
 
       <!-- LEFT COLUMN: Hero Video (Sticky on Desktop) -->
-      <div class="w-full md:w-1/2 h-[100vh] md:h-[100vh] md:sticky md:top-0 md:self-start relative border-b md:border-b-0 md:border-r border-stone-200" style="background-color: var(--theme-bg);">
+      <div class="min-w-0 overflow-hidden w-full md:w-1/2 h-[100vh] md:h-[100vh] md:sticky md:top-0 md:self-start relative border-b md:border-b-0 md:border-r border-stone-200" style="background-color: var(--theme-bg);">
 
           <!-- Video Container with Parallax Hook -->
           <div class="parallax-video-container absolute inset-0 w-full h-full overflow-hidden z-0">
@@ -80,7 +80,7 @@ const welcomeMessage = getDynamicMessage({
             class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-8 pointer-events-none"
             style="color: var(--theme-hero-text);"
           >
-               <h1 class="hero-text text-[8em] font-logo mb-4 drop-shadow-lg">Buvette</h1>
+               <h1 class="hero-text text-[6em] md:text-[8em] font-logo mb-4 drop-shadow-lg">Buvette</h1>
                <p class="text-xl md:text-2xl font-light tracking-wide drop-shadow-md max-w-md whitespace-pre-line">
                  {welcomeMessage}
                  <br />
@@ -133,7 +133,7 @@ const welcomeMessage = getDynamicMessage({
                   </div>
                </div>
 
-               <!-- Instagram Scattered Collage -->
+               !-- Instagram Scattered Collage -->
                <div class="mt-16 mb-8 w-full">
                   <h2 class="font-display text-2xl text-center md:text-left opacity-90 pl-8 pb-4 md:pl-16">Latest...</h2>
                   <InstagramCollage images={instagramFeed} />

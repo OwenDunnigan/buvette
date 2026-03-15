@@ -11,7 +11,7 @@ export default defineConfig({
   build: {
     // This tells Astro to inline small CSS files (usually < 4kb, 
     // but you can adjust or set to 'always' to force it)
-    inlineStylesheets: 'always', 
+    inlineStylesheets: 'auto', 
   },
   vite: {
     ssr: {

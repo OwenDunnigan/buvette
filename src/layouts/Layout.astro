@@ -19,21 +19,21 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 ---
 
 <!doctype html>
-<html lang="en" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: var(--theme-accent); --contrast-level: ${theme.effects.contrast / 100}; --blur-amount: ${theme.effects.blur};`}>
+<html lang="en" class="overflow-x-hidden" style={`--viscosity: ${viscosity}s; --wind-force: ${windForce}; --temp-mood: ${tempMood}; --primary-color: var(--theme-accent); --contrast-level: ${theme.effects.contrast / 100}; --blur-amount: ${theme.effects.blur};`}>
 	<head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<Analytics />
-		<meta charset="UTF-8" />
 		<meta name="description" content="Buvette is primarily a cozy and delicious brunch spot in the Osborne Village area of Winnipeg, Manitoba. It focuses on rich food and fun vibes with a focus on ingredients and season. Sometimes we have even have evening events!" />
-        <meta name="keywords" content="Buvette, Winnipeg restaurant, dynamic menu, queer-owned, women-run, local ingredients, seasonal food, cozy dining experience"
-		<meta name="viewport" content="width=device-width" />
+        <meta name="keywords" content="Buvette, Winnipeg restaurant, dynamic menu, queer-owned, women-run, local ingredients, seasonal food, cozy dining experience" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content={theme.lightColors.bg} />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content={theme.darkColors.bg} />
 		<title>{title} | Buvette</title>
 	</head>
-	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id}`}>
+	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id} overflow-x-hidden`}>
 		{/* Victory Stripe - Jets Colors (Navy, Red, Silver, White) when they win */}
 		{vibe.social.jetsStatus === 'VICTORY' && (
 			<div class="fixed top-0 left-0 right-0 h-2 z-50 jets-victory-stripe" aria-label="Jets Victory Banner"></div>
