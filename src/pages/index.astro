@@ -45,7 +45,7 @@ const welcomeMessage = getDynamicMessage({
   </a>
 
   <!-- Main Wrapper: Split on Desktop, Stacked on Mobile -->
-  <div class="flex flex-col md:flex-row min-h-screen">
+  <div class="flex flex-col md:flex-row min-h-screen overflow-hidden">
 
       <!-- LEFT COLUMN: Hero Video (Sticky on Desktop) -->
       <div class="min-w-0 overflow-hidden w-full md:w-1/2 h-[100vh] md:h-[100vh] md:sticky md:top-0 md:self-start relative border-b md:border-b-0 md:border-r border-stone-200" style="background-color: var(--theme-bg);">
@@ -133,7 +133,6 @@ const welcomeMessage = getDynamicMessage({
                   </div>
                </div>
 
-               !-- Instagram Scattered Collage -->
                <div class="mt-16 mb-8 w-full">
                   <h2 class="font-display text-2xl text-center md:text-left opacity-90 pl-8 pb-4 md:pl-16">Latest...</h2>
                   <InstagramCollage images={instagramFeed} />

@@ -33,7 +33,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content={theme.darkColors.bg} />
 		<title>{title} | Buvette</title>
 	</head>
-	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id} overflow-x-hidden`}>
+	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id}`}>
 		{/* Victory Stripe - Jets Colors (Navy, Red, Silver, White) when they win */}
 		{vibe.social.jetsStatus === 'VICTORY' && (
 			<div class="fixed top-0 left-0 right-0 h-2 z-50 jets-victory-stripe" aria-label="Jets Victory Banner"></div>
