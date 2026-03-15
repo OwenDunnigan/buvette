@@ -24,16 +24,14 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
 		<VibeInjector currentTheme={theme} windSpeed={windSpeed} />
 		<Analytics />
 		<meta charset="UTF-8" />
-		<meta name="description" content="Buvette Restaurant" />
+		<meta name="description" content="Buvette is primarily a cozy and delicious brunch spot in the Osborne Village area of Winnipeg, Manitoba. It focuses on rich food and fun vibes with a focus on ingredients and season. Sometimes we have even have evening events!" />
+        <meta name="keywords" content="Buvette, Winnipeg restaurant, dynamic menu, queer-owned, women-run, local ingredients, seasonal food, cozy dining experience"
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content={theme.lightColors.bg} />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content={theme.darkColors.bg} />
 		<title>{title} | Buvette</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Recursive:slnt,wght,CASL,MONO@-15..0,300..1000,0..1,0..1&family=Sono:wght,MONO@200..800,0..1&display=swap" rel="stylesheet">
 	</head>
 	<body class={`font-mono flex flex-col min-h-screen theme-${theme.id}`}>
 		{/* Victory Stripe - Jets Colors (Navy, Red, Silver, White) when they win */}
@@ -76,7 +74,7 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
                 </div>
 
                 <div class="text-center">
-                    <p class="uppercase text-m mb-2">We are proudly queer and woman ran!</p>
+                    <p class="uppercase text-m mb-2">We are proudly queer and women ran!</p>
                     <p class="font-bold uppercase text-lg mb-2">Thank You!</p>
                     <p class="text-xs uppercase mb-2">Please Come Again</p>
                     <p class="text-[10px] uppercase">&copy; {new Date().getFullYear()} Buvette EST.</p>
@@ -251,5 +249,38 @@ const tempMood = Math.min(Math.max((temp + 30) / 60, 0), 1);
         display: inline-block;
         animation: windSway calc(4s - (var(--wind-force-ratio) * 2s)) ease-in-out infinite alternate;
         transform-origin: bottom center;
+    }
+
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('/fonts/IBMPlexMono-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('/fonts/IBMPlexMono-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'IBM Plex Mono';
+      src: url('/fonts/IBMPlexMono-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Recursive';
+      src: url('/fonts/Recursive-VariableFont.ttf') format('truetype-variations');
+      font-weight: 300 1000;
+    }
+
+    @font-face {
+      font-family: 'Sono';
+      src: url('/fonts/Sono-VariableFont.ttf') format('truetype-variations');
+      font-weight: 200 800;
     }
 </style>
