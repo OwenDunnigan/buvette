@@ -1,6 +1,9 @@
 export interface InstagramMedia {
   id: string;
+  media_type: string;
   media_url: string;
+  thumbnail_url?: string;
+  permalink?: string;
   caption?: string;
   timestamp: string;
 }
@@ -31,7 +34,7 @@ export async function fetchInstagramFeed(): Promise<InstagramMedia[]> {
       return instagramCache ? instagramCache.media : [];
     }
 
-    const apiUrl = `https://graph.facebook.com/v25.0/${accountId}?fields=business_discovery.username(buvette.inthevillage){media{media_url,caption,timestamp}}&access_token=${accessToken}`;
+    const apiUrl = `https://graph.facebook.com/v25.0/${accountId}?fields=business_discovery.username(buvette.inthevillage){media{media_type,media_url,thumbnail_url,permalink,caption,timestamp}}&access_token=${accessToken}`;
 
     const response = await fetch(apiUrl);
 
