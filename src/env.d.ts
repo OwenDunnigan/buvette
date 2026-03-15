@@ -6,3 +6,12 @@ declare namespace App {
 		vibe: import("./utils/vibeEngine").WinnipegContext;
 	}
 }
+
+interface ImportMetaEnv {
+  readonly INSTAGRAM_ACCESS_TOKEN: string;
+  readonly INSTAGRAM_ACCOUNT_ID: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

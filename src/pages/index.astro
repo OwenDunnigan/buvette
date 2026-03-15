@@ -2,9 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import { getHeroOverlay, getDynamicMessage } from '../utils/tempColors';
 import { getAllHolidayNames } from '../utils/holidays';
+import InstagramCollage from '../components/InstagramCollage.astro';
+import { fetchInstagramFeed } from '../utils/instagram';
 
 const holidayNames = getAllHolidayNames();
 const { vibe } = Astro.locals;
+
+// Fetch Instagram images
+const instagramFeed = await fetchInstagramFeed();
 const currentHoliday = vibe.temporal.holiday.holidayName;
 
 // Get temperature-based overlay
@@ -121,6 +126,12 @@ const welcomeMessage = getDynamicMessage({
                       <p class="mb-1">Winnipeg, MB</p>
                       <p class="mt-4"><a href="#" class="underline hover:opacity-80">Get Directions &rarr;</a></p>
                   </div>
+               </div>
+
+               <!-- Instagram Scattered Collage -->
+               <div class="mt-16 mb-8 w-full">
+                  <h2 class="font-display text-2xl text-center md:text-left mb-4 opacity-90">Lately...</h2>
+                  <InstagramCollage images={instagramFeed} />
                </div>
 
                <!-- Vibe Engine Debug (Enhanced) -->

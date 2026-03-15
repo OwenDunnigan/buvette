@@ -1,0 +1,20 @@
+
+> app@0.0.1 dev
+> astro dev
+
+17:39:55 [types] Generated 1ms
+17:39:56 [content] Syncing content
+17:39:56 [content] Synced content
+
+ astro  v5.16.11 ready in 1205 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+
+17:39:56 watching for file changes...
+
+ update  ▶ New version of Astro available: 6.0.4
+  Run npx @astrojs/upgrade to update
+
+Instagram API returned status 400: Bad Request
+17:40:14 [200] / 1563ms

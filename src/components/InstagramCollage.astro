@@ -1,0 +1,107 @@
+---
+import type { InstagramMedia } from '../utils/instagram';
+
+export interface Props {
+  images: InstagramMedia[];
+}
+
+const { images } = Astro.props;
+
+// Function to generate random rotation between min and max degrees
+function getRandomRotation(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}
+
+// Function to generate random translation percentage (offset)
+function getRandomOffset(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}
+
+// Ensure the client-side scattered logic allows an initial scatter effect
+// Server renders a base static style or randomized based on hydration
+const scatteredImages = images.map((img) => ({
+  ...img,
+  rotation: getRandomRotation(-15, 15),
+  offsetX: getRandomOffset(-10, 10),
+  offsetY: getRandomOffset(-10, 10),
+  zIndex: Math.floor(Math.random() * 10), // Randomize depth stacking
+}));
+---
+
+<div class="instagram-collage-wrapper relative w-full py-12 px-4 min-h-[500px] flex items-center justify-center overflow-hidden">
+
+  <div class="relative w-full max-w-3xl h-[400px]">
+    {images.length > 0 ? (
+      scatteredImages.map((image, i) => (
+        <a
+          href={`https://www.instagram.com/buvette.inthevillage/`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="polaroid-card absolute top-1/2 left-1/2 group transition-all duration-300 hover:scale-110 hover:z-50 focus:z-50 focus:scale-110"
+          style={`transform: translate(calc(-50% + ${image.offsetX}vw), calc(-50% + ${image.offsetY}vh)) rotate(${image.rotation}deg); z-index: ${image.zIndex};`}
+          aria-label={image.caption ? `View Instagram post: ${image.caption}` : "View Instagram post"}
+        >
+          <div class="bg-white p-3 pb-8 md:p-4 md:pb-12 shadow-xl border border-stone-200 rounded-sm w-[150px] md:w-[200px] max-w-[40vw]">
+            <div class="w-full aspect-square overflow-hidden bg-stone-100 flex items-center justify-center">
+              <img
+                src={image.media_url}
+                alt={image.caption || "Instagram Post"}
+                loading="lazy"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            {/* Optional caption snippet space */}
+          </div>
+        </a>
+      ))
+    ) : (
+      <div class="text-center w-full text-stone-500 italic flex items-center justify-center h-full">
+        <p>Stay tuned! Our recent moments are taking a moment to load.</p>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .instagram-collage-wrapper {
+    /* Keeps the collage slightly detached from the regular flow, feeling like it's tossed on the table */
+  }
+
+  .polaroid-card {
+    will-change: transform, z-index;
+    transform-origin: center center;
+    /* Optional slight delay for staggering interactions */
+  }
+</style>
+
+<script>
+  // Add an entrance animation or client-side randomizer on mount for the scattered collage
+  // so the layout varies even if SSR caches the HTML structure
+  function initCollage() {
+    const cards = document.querySelectorAll('.polaroid-card') as NodeListOf<HTMLElement>;
+    cards.forEach(card => {
+      // Re-scatter slightly to ensure true randomness on client side
+      // preventing hydration mismatch or cached rigidness
+      const currentTransform = card.style.transform;
+      if (currentTransform) {
+        // extract the server-side translation to preserve general centering
+        const rx = (Math.random() * 30 - 15).toFixed(1); // -15 to +15 deg
+        const ox = (Math.random() * 20 - 10).toFixed(1); // -10vw to +10vw
+        const oy = (Math.random() * 20 - 10).toFixed(1); // -10vh to +10vh
+
+        card.style.transform = `translate(calc(-50% + ${ox}vw), calc(-50% + ${oy}vh)) rotate(${rx}deg)`;
+        card.style.zIndex = Math.floor(Math.random() * 10).toString();
+      }
+    });
+  }
+
+  // Set up initialization
+  if (typeof document !== 'undefined') {
+    document.addEventListener('astro:page-load', initCollage);
+    if (document.readyState === 'complete') {
+      initCollage();
+    } else {
+      document.addEventListener('DOMContentLoaded', initCollage);
+    }
+  }
+</script>
