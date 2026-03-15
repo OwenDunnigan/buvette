@@ -12,73 +12,77 @@ const { vibe } = Astro.locals;
       </div>
   </header>
 
-  <div class="max-w-[60vw] mx-auto pt-28">
+  <div class="w-full px-6 md:px-12 max-w-7xl mx-auto pt-28 pb-20">
       <div class="text-center mb-12 pb-4 border-b-2 border-stone-900 border-dashed">
         <h1 class="text-4xl font-display font-bold uppercase tracking-[0.2em]">About Us</h1>
         <p class="text-xs font-mono uppercase mt-2">Est. 2021 &mdash; Winnipeg, MB</p>
       </div>
 
-      <div class="font-mono text-sm space-y-12 leading-relaxed">
+      <div class="flex flex-col md:flex-row gap-12 items-start font-mono text-sm leading-relaxed">
 
-        <!-- Section 1 -->
-        <div class="space-y-6">
-            <p class="uppercase text-center" style="font-weight: 500;">
+        <!-- Left Column: Images (45%) -->
+        <div class="w-full md:w-[45%] space-y-8 order-2 md:order-1">
+            <div class="w-full bg-stone-200 border border-stone-900">
+                <div class="aspect-video w-full overflow-hidden">
+                    <img
+                        src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
+                        alt="Restaurant Interior"
+                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                    />
+                </div>
+                <p class="text-[10px] p-2 text-center normal-case text-stone-500 bg-stone-100">The main dining room during golden hour.</p>
+            </div>
+
+            <div class="w-full bg-stone-200 border border-stone-900">
+                <div class="grid grid-cols-2">
+                    <div class="aspect-square overflow-hidden border-r border-stone-900">
+                         <img
+                            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80"
+                            alt="Plating detail"
+                            class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                        />
+                    </div>
+                    <div class="aspect-square overflow-hidden">
+                         <img
+                            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=80"
+                            alt="Chef in kitchen"
+                            class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                        />
+                    </div>
+                </div>
+                <p class="text-[10px] p-2 text-center normal-case text-stone-500 bg-stone-100 border-t border-stone-900">Seasonal plating & Kitchen preparation.</p>
+            </div>
+        </div>
+
+        <!-- Right Column: Text (55%) -->
+        <div class="w-full md:w-[55%] space-y-10 order-1 md:order-2">
+            <p class="uppercase text-lg md:text-xl leading-relaxed" style="font-weight: 500;">
             Buvette is a cozy, plant-filled neighborhood eatery dedicated to the art of delicious food. Driven by the joy of creation, we combine fresh, seasonal ingredients with comforting classics, preparing every dish with imagination and heart.
             </p>
 
-            <div class="aspect-video w-full overflow-hidden bg-stone-200 border border-stone-900">
-                <img
-                    src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
-                    alt="Restaurant Interior"
-                    class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                />
-                <p class="text-[10px] mt-1 text-center normal-case text-stone-500">The main dining room during golden hour.</p>
+            <div class="py-4">
+                <div class="border-l-4 border-stone-900 pl-6 italic normal-case text-xl md:text-2xl font-display text-stone-800">
+                "It's not just about the food, it's about the moment."
+                </div>
             </div>
-        </div>
 
-        <!-- Quote -->
-        <div class="py-4">
-            <div class="border-l-4 border-stone-900 pl-6 italic normal-case text-lg md:text-xl font-display text-stone-800">
-            "It's not just about the food, it's about the moment."
-            </div>
-        </div>
-
-        <!-- Section 2 -->
-        <div class="space-y-6">
-            <p class="text-[15px]">
+            <p class="text-base md:text-lg leading-relaxed">
             Our kitchen focuses on creating dishes that strike the perfect balance between culinary creativity and warm, nostalgic comfort. Whether you are stopping by for our signature <b>Eggs Benedict Flight</b> on a Saturday, indulging in a limited time creation such as a <b>French Toast Breakfast Sausage Club Sandwich</b>, or discovering our famous <b>Spicy Cucumbers</b>, every plate is layered with flavor.
             <br>
             <br>
             Run by a passionate team that loves to make you feel right at home, Buvette isn't just a place to eat; it's an inviting third-place on the weekdays &ndash; bustling community eatery on the weekends. Whether you're a local regular or a weekend traveler looking for the best breakfast in the city, we invite you to grab a signature coffee, pull up a chair, and experience a taste of our home.
             </p>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div class="aspect-square overflow-hidden bg-stone-200 border border-stone-900">
-                     <img
-                        src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80"
-                        alt="Plating detail"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                    />
-                </div>
-                <div class="aspect-square overflow-hidden bg-stone-200 border border-stone-900">
-                     <img
-                        src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=80"
-                        alt="Chef in kitchen"
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                    />
+            <div class="pt-8 md:pt-16 text-left">
+                <div class="inline-block border-2 border-stone-900 p-4 rotate-2 hover:rotate-0 transition-transform bg-white shadow-lg">
+                    <p class="text-base font-bold font-display">Chef's Table</p>
+                    <p class="text-xs font-mono">Available by request</p>
+                    <div class="mt-2 w-full h-px bg-stone-900"></div>
+                    <p class="text-xs mt-1">Ask your server</p>
                 </div>
             </div>
-            <p class="text-[10px] text-center normal-case text-stone-500">Seasonal plating & Kitchen preparation.</p>
         </div>
-      </div>
 
-      <div class="mt-16 text-center">
-        <div class="inline-block border-2 border-stone-900 p-4 rotate-2 hover:rotate-0 transition-transform bg-white shadow-lg">
-          <p class="text-sm font-bold font-display">Chef's Table</p>
-          <p class="text-[10px] font-mono">Available by request</p>
-          <div class="mt-2 w-full h-px bg-stone-900"></div>
-          <p class="text-[10px] mt-1">Ask your server</p>
-        </div>
       </div>
   </div>
 </Layout>
