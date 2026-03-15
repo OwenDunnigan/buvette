@@ -99,77 +99,78 @@ async function getJetsContext(): Promise<JetsStatus> {
     }
 
     try {
-        const todayStr = new Date().toISOString().split('T')[0];
+        // 1. Timezone-aware helpers for Winnipeg
+        const getWpgInfo = (offsetDays = 0) => {
+            const date = new Date();
+            date.setDate(date.getDate() + offsetDays);
+            const fmt = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'America/Winnipeg',
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: 'numeric', hour12: false
+            });
+            const parts = fmt.formatToParts(date);
+            const hash: any = {};
+            parts.forEach(p => hash[p.type] = p.value);
+            return {
+                dateStr: `${hash.year}-${hash.month}-${hash.day}`,
+                hour: parseInt(hash.hour)
+            };
+        };
 
-        // Calculate yesterday's date
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yStr = yesterday.toISOString().split('T')[0];
+        const winnipegToday = getWpgInfo(0);
+        const yesterdayStr = getWpgInfo(-1).dateStr;
 
-        // Start both fetches in parallel
-        const todayPromise = fetch(`https://api-web.nhle.com/v1/score/${todayStr}`);
-        const yesterdayPromise = fetch(`https://api-web.nhle.com/v1/score/${yStr}`);
-        yesterdayPromise.catch(() => { }); // Prevent unhandled rejection if we return early
+        // 2. Fetch scores in parallel
+        const [todayRes, yesterdayRes] = await Promise.all([
+            fetch(`https://api-web.nhle.com/v1/score/${winnipegToday.dateStr}`).then(r => r.json()).catch(() => ({ games: [] })),
+            fetch(`https://api-web.nhle.com/v1/score/${yesterdayStr}`).then(r => r.json()).catch(() => ({ games: [] }))
+        ]);
 
-        // 1. Fetch the Scoreboard for TODAY
-        const res = await todayPromise;
-        if (!res.ok) {
-            if (jetsCache) {
-                console.warn('Falling back to stale Jets status cache due to error.');
-                return jetsCache.data;
-            }
-            return 'NONE';
-        }
-        const data = await res.json();
-
-        const todaysGame = data.games.find((g: any) =>
+        const findJets = (data: any) => data.games?.find((g: any) => 
             g.homeTeam.abbrev === 'WPG' || g.awayTeam.abbrev === 'WPG'
         );
 
-        // 2. CHECK: Is it Game Day?
-        if (todaysGame) {
-            let status: JetsStatus = 'GAME_DAY';
-            if (todaysGame.gameState === 'FINAL') {
-                const isWin = (todaysGame.homeTeam.abbrev === 'WPG' && todaysGame.homeTeam.score > todaysGame.awayTeam.score) ||
-                    (todaysGame.awayTeam.abbrev === 'WPG' && todaysGame.awayTeam.score > todaysGame.homeTeam.score);
-                status = isWin ? 'VICTORY' : 'DEFEAT';
-            }
-            jetsCache = { data: status, timestamp: now };
-            return status;
+        const todaysGame = findJets(todayRes);
+        const yesterdaysGame = findJets(yesterdayRes);
+
+        // Helper to determine game result
+        const getResult = (game: any): 'VICTORY' | 'DEFEAT' | 'NONE' => {
+            if (!game || !['FINAL', 'OFF'].includes(game.gameState)) return 'NONE';
+            const isHome = game.homeTeam.abbrev === 'WPG';
+            const wpgScore = isHome ? game.homeTeam.score : game.awayTeam.score;
+            const oppScore = isHome ? game.awayTeam.score : game.homeTeam.score;
+            return wpgScore > oppScore ? 'VICTORY' : 'DEFEAT';
+        };
+
+        const todayResult = getResult(todaysGame);
+        const yesterdayResult = getResult(yesterdaysGame);
+
+        let finalStatus: JetsStatus = 'NONE';
+
+        // 3. Precedence Logic
+        // Priority 1: Today's game is finished (Early Sunday win at 4pm)
+        if (todayResult !== 'NONE') {
+            finalStatus = todayResult;
+        } 
+        // Priority 2: Pre-9AM "Victory Hangover"
+        else if (winnipegToday.hour < 9 && yesterdayResult === 'VICTORY' && todaysGame) {
+            finalStatus = 'VICTORY';
+        }
+        // Priority 3: Today is a Game Day (Takes over at 9am)
+        else if (todaysGame) {
+            finalStatus = 'GAME_DAY';
+        }
+        // Priority 4: Yesterday's result (Carry-over for the rest of the day)
+        else if (yesterdayResult !== 'NONE') {
+            finalStatus = yesterdayResult;
         }
 
-        // 3. CHECK: Did they play yesterday?
-        const yRes = await yesterdayPromise;
-        if (!yRes.ok) {
-            if (jetsCache) {
-                console.warn('Falling back to stale Jets status cache due to error.');
-                return jetsCache.data;
-            }
-            return 'NONE';
-        }
-        const yData = await yRes.json();
+        jetsCache = { data: finalStatus, timestamp: now };
+        return finalStatus;
 
-        const lastGame = yData.games.find((g: any) =>
-            g.homeTeam.abbrev === 'WPG' || g.awayTeam.abbrev === 'WPG'
-        );
-
-        if (lastGame && lastGame.gameState === 'FINAL') {
-            const isWin = (lastGame.homeTeam.abbrev === 'WPG' && lastGame.homeTeam.score > lastGame.awayTeam.score) ||
-                (lastGame.awayTeam.abbrev === 'WPG' && lastGame.awayTeam.score > lastGame.homeTeam.score);
-            const status: JetsStatus = isWin ? 'VICTORY' : 'DEFEAT';
-            jetsCache = { data: status, timestamp: now };
-            return status;
-        }
-
-        jetsCache = { data: 'NONE', timestamp: now };
-        return 'NONE';
     } catch (e) {
-        console.error('Error fetching Jets status:', e);
-        if (jetsCache) {
-            console.warn('Falling back to stale Jets status cache due to error.');
-            return jetsCache.data;
-        }
-        return 'NONE';
+        console.error('Jets Context Error:', e);
+        return jetsCache?.data || 'NONE';
     }
 }
 
