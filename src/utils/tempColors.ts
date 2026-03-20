@@ -252,7 +252,7 @@ export function getDynamicMessage(context: {
         else if (holiday.includes('Lunar New Year')) messageParts.push("Happy Lunar New Year! Wishing you joy and prosperity.");
         else if (holiday.includes('Diwali')) messageParts.push("Wishing you a bright and joyous Diwali.");
         else if (holiday.includes('Holi')) messageParts.push("Happy Holi. Wishing you a vibrant and colorful season.");
-        else if (holiday.includes('Eid')) messageParts.push("Eid Mubarak! Wishing you peace and joy.");
+        else if (holiday.includes('Eid')) messageParts.push("Happy Eid! Wishing you peace and joy.");
         else if (holiday.includes('Philippine Independence')) messageParts.push("Happy Philippine Independence Day.");
         else if (holiday.includes('Vaisakhi')) messageParts.push("Happy Vaisakhi! Wishing you a season of abundance.");
     }
