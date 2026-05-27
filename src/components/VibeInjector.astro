@@ -152,6 +152,66 @@ const cssVariables = `
     background-image: linear-gradient(to top, #5D4037 0%, transparent 20%);
     background-attachment: fixed;
   }
+
+  /* Effect 5: Pride Month */
+  @keyframes prideBackgroundRotate {
+    0%, 12% { background-color: #E40303; color: #FFFFFF; } /* Red */
+    16%, 28% { background-color: #FF8C00; color: #1A1A1A; } /* Orange */
+    33%, 45% { background-color: #FFED00; color: #1A1A1A; } /* Yellow */
+    50%, 62% { background-color: #008026; color: #FFFFFF; } /* Green */
+    66%, 78% { background-color: #24408E; color: #FFFFFF; } /* Blue */
+    83%, 95% { background-color: #732982; color: #FFFFFF; } /* Purple */
+    100% { background-color: #E40303; color: #FFFFFF; }
+  }
+
+  @keyframes prideBackgroundRotateDark {
+    0%, 12% { background-color: #8B0000; color: #FFFFFF; } /* Dark Red */
+    16%, 28% { background-color: #8B4500; color: #F5F5F5; } /* Dark Orange */
+    33%, 45% { background-color: #8B8B00; color: #1A1A1A; } /* Dark Yellow */
+    50%, 62% { background-color: #004D00; color: #FFFFFF; } /* Dark Green */
+    66%, 78% { background-color: #00004D; color: #FFFFFF; } /* Dark Blue */
+    83%, 95% { background-color: #3D004D; color: #FFFFFF; } /* Dark Purple */
+    100% { background-color: #8B0000; color: #FFFFFF; }
+  }
+
+  :global(.theme-PRIDE) body {
+    animation: prideBackgroundRotate 30s ease-in-out infinite;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(.theme-PRIDE) body {
+      animation: prideBackgroundRotateDark 30s ease-in-out infinite;
+    }
+  }
+
+  :global(.theme-PRIDE) .hero-text {
+    text-shadow: none !important;
+    background: linear-gradient(
+      to right,
+      #000000 0%,
+      #613915 9%,
+      #74D7EE 18%,
+      #FFAFC7 27%,
+      #FFFFFF 36%,
+      #E40303 45%,
+      #FF8C00 54%,
+      #FFED00 63%,
+      #008026 72%,
+      #24408E 81%,
+      #732982 90%,
+      #000000 100%
+    );
+    background-size: 200% auto;
+    color: #000;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: prideGradientText 10s linear infinite;
+  }
+
+  @keyframes prideGradientText {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
 `;
 ---
 

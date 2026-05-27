@@ -28,7 +28,8 @@ export type ThemeKey =
   | 'DIWALI'
   | 'VALENTINES'
   | 'CHRISTMAS'
-  | 'CANADA_DAY';
+  | 'CANADA_DAY'
+  | 'PRIDE';
 
 export interface ThemeConfig {
   id: ThemeKey;       // Unique ID
@@ -376,5 +377,16 @@ export const THEMES: Record<ThemeKey, ThemeConfig> = {
     physics: { viscosity: 0.9, cursor: 'default' },
     typography: { casual: 0.5, slant: 0, weight: 700 },
     effects: { contrast: 115, blur: '0px', noise: 0, saturate: 130 }
+  },
+
+  'PRIDE': {
+    id: 'PRIDE',
+    label: "Pride Month",
+    // We set base background colors as calm, CSS animation will take over for PRIDE theme
+    lightColors: { bg: '#FFF0F5', text: '#333333', accent: '#FF69B4', surface: '#FFFFFF' },
+    darkColors: { bg: '#1A1A1A', text: '#F5F5F5', accent: '#FF1493', surface: '#2C2C2C' },
+    physics: { viscosity: 1.0, cursor: 'default' },
+    typography: { casual: 0.8, slant: 0, weight: 600 },
+    effects: { contrast: 105, blur: '0px', noise: 0.02, saturate: 110 }
   },
 };
