@@ -186,6 +186,7 @@ const cssVariables = `
 
   :global(.theme-PRIDE) .hero-text {
     text-shadow: none !important;
+    filter: none !important; /* override Tailwind's drop-shadow-lg */
     background: linear-gradient(
       to right,
       #000000 0%,
@@ -202,9 +203,10 @@ const cssVariables = `
       #000000 100%
     );
     background-size: 200% auto;
-    color: #000;
+    color: transparent !important;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent !important;
     animation: prideGradientText 10s linear infinite;
   }
 
