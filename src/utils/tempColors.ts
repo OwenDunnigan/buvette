@@ -255,6 +255,7 @@ export function getDynamicMessage(context: {
         else if (holiday.includes('Eid')) messageParts.push("Happy Eid! Wishing you peace and joy.");
         else if (holiday.includes('Philippine Independence')) messageParts.push("Happy Philippine Independence Day.");
         else if (holiday.includes('Vaisakhi')) messageParts.push("Happy Vaisakhi! Wishing you a season of abundance.");
+        else if (holiday.includes('Pride Month')) messageParts.push("Happy Pride Month! 🏳️‍🌈✨ Wishing you a beautiful and joyful June. We are so proud to celebrate our vibrant community.");
     }
 
     // 3. Weather & Sports Context (Secondary Message)

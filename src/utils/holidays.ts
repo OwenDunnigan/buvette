@@ -132,6 +132,8 @@ const HOLIDAY_RANGES: HolidayRange[] = [
     { name: 'Fringe Festival', theme: 'MANIC_PARTY', startMonth: 6, startDay: 15, endMonth: 6, endDay: 27 },
     // Folk Fest (mid-July, ~4 days)
     { name: 'Winnipeg Folk Festival', theme: 'PRAIRIE_GOLD', startMonth: 6, startDay: 8, endMonth: 6, endDay: 11 },
+    // Pride Month (Entire month of June)
+    { name: 'Pride Month', theme: 'PRIDE', startMonth: 5, startDay: 1, endMonth: 5, endDay: 30 },
 ];
 
 function formatDateKey(date: Date): string {
